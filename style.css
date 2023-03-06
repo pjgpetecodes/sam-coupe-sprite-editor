@@ -27,6 +27,7 @@
     margin-right: 20px;
     margin-bottom: 20px;
     justify-self: center;
+    align-self: center;
   }
   
   #color-grid .color-cell {
@@ -50,6 +51,7 @@
   
   .cell {
     background-color: white;
+    border: 1px solid black;
   }
   
   #buttons {
