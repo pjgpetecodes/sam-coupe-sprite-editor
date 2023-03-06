@@ -34,10 +34,12 @@ for (let i = 0; i < 1024; i++) {
 
 // clear button click event
 clearButton.addEventListener('click', () => {
-  const cells = document.querySelectorAll('.cell');
-  cells.forEach(cell => {
-    cell.style.backgroundColor = 'white';
-  });
+    const selectedColorCell = document.querySelector('#color-grid .selected');
+    const color = window.getComputedStyle(selectedColorCell).backgroundColor;
+    const cells = document.querySelectorAll('#grid .cell');
+    cells.forEach((cell) => {
+      cell.style.backgroundColor = color;
+    });
 });
 
 // convert button click event

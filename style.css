@@ -18,6 +18,12 @@
     margin-bottom: 20px;
   }
   
+  .grid-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+  }
+  
   #color-grid {
     display: grid;
     grid-template-columns: repeat(4, 30px);
@@ -27,7 +33,6 @@
     margin-right: 20px;
     margin-bottom: 20px;
     justify-self: center;
-    align-self: center;
   }
   
   #color-grid .color-cell {
@@ -49,7 +54,7 @@
     justify-self: center;
   }
   
-  .cell {
+  #grid .cell {
     background-color: white;
     border: 1px solid black;
   }
