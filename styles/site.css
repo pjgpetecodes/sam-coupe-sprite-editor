@@ -1,0 +1,111 @@
+button {
+  width: 80px;
+}
+
+.navbar {
+  background-color: #0166F6;
+}
+
+#Container {
+  text-align: center;
+}
+
+.right-logo img {
+  width: 60px;
+  height: 75px;
+  align-content: right;
+}
+
+#PixelTable {
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  border-style: solid;
+}
+
+#Buttons {
+  margin-bottom: 15px;
+}
+
+#Buttons button {
+  width: 80px;
+}
+
+td {
+  cursor: pointer;
+  background-color: black;
+  border-style: dashed;
+  border-width: 1px;
+  border-color: white;
+  width: 25px;
+  height: 25px;
+}
+
+.centerPixel {
+  border-color: red;
+  border-width: 2px;
+}
+
+.selectedPixel {
+  background-color: black;
+}
+
+#output {
+    text-align: left;
+    margin: 0 auto;
+    align-content: center;
+    padding: 25px;
+    background-color: #f9f2f4;
+    width: 550px;
+}
+
+#codeBlock {
+  width: 400px;
+}
+
+a.navbar-brand img {
+  width: 50%;
+}
+
+#main-title h2 {
+  color: white;
+}
+
+.row {
+  width: 100%;
+}
+
+#main-title {
+  align-items: center;
+  justify-content: center;
+  display: flex;
+}
+
+button {
+  width: 150px;
+}
+
+.panel.bgcolor.col, .panel.fgcolor.col {
+  align-items: center;
+  justify-content: center;
+  display: flex;
+}
+
+#demo-app
+{
+  margin: 0px;
+}
+
+#disclaimer-container {
+  font-size: small;
+  font-style: italic;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+
+#disclaimer-content {
+  align-self: flex-end;
+  width: 100%;
+}

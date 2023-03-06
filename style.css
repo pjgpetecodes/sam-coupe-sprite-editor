@@ -1,0 +1,49 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  
+  body {
+    font-family: sans-serif;
+  }
+  
+  .container {
+    max-width: 960px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  
+  h1 {
+    margin-bottom: 20px;
+  }
+  
+  #grid {
+    display: grid;
+    grid-template-columns: repeat(32, 30px);
+    grid-template-rows: repeat(32, 30px);
+    gap: 1px;
+    border: 1px solid black;
+    margin-bottom: 20px;
+  }
+  
+  .cell {
+    background-color: white;
+  }
+  
+  #buttons {
+    margin-bottom: 20px;
+  }
+  
+  button {
+    margin-right: 10px;
+    padding: 10px;
+  }
+  
+  input[type="color"] {
+    width: 0;
+    height: 0;
+    padding: 0;
+    border: none;
+  }
+  
