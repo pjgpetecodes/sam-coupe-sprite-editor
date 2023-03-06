@@ -4,7 +4,7 @@ const colorPicker = document.querySelector('#color-picker');
 const clearButton = document.querySelector('#clear');
 const convertButton = document.querySelector('#convert');
 
-const colors = ['#ffffff', '#c7c7c7', '#9f9f9f', '#7f7f7f', '#5f5f5f', '#3f3f3f', '#1f1f1f', '#000000', '#ff9c9c', '#ff0000', '#c70000', '#9f0000', '#7f0000', '#5f0000', '#3f0000', '#1f0000'];
+const colors = ['#000000', '#1d2b53', '#7e2553', '#008751', '#ab5236', '#5f574f', '#c2c3c7', '#fff1e8', '#ff004d', '#ffa300', '#ffb6b0', '#ffd93f', '#94e044', '#a8e6ff', '#ff80c3', '#ffffff'];
 
 // create the color grid
 for (let i = 0; i < colors.length; i++) {
