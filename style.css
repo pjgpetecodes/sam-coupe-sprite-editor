@@ -18,6 +18,26 @@
     margin-bottom: 20px;
   }
   
+  #color-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 30px);
+    grid-template-rows: repeat(4, 30px);
+    gap: 1px;
+    border: 1px solid black;
+    margin-right: 20px;
+    margin-bottom: 20px;
+    justify-self: center;
+  }
+  
+  #color-grid .color-cell {
+    background-color: white;
+    border: 1px solid #ddd;
+  }
+  
+  #color-grid .selected {
+    border: 2px solid black;
+  }
+  
   #grid {
     display: grid;
     grid-template-columns: repeat(32, 30px);
@@ -25,6 +45,7 @@
     gap: 1px;
     border: 1px solid black;
     margin-bottom: 20px;
+    justify-self: center;
   }
   
   .cell {
