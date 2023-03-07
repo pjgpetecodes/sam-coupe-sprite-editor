@@ -1,16 +1,31 @@
 import { createGrid, setAllCellsToDefaultColor, hexToRgb, RgbToHex } from './grid.js';
-import { colors, createColorGrid } from './colors.js'
+import { colors, createColorGrid, setSelectedColor } from './colors.js'
 
-createGrid();
-setAllCellsToDefaultColor();
 createColorGrid();
+createGrid();
+setSelectedColor(15);
+setAllCellsToDefaultColor();
+setSelectedColor(0);
 
 const outputTextBox = document.querySelector('#output');
 
 const clearButton = document.querySelector('#clear');
 
-// clear button click event
+// Clear button click event
 clearButton.addEventListener('click', () => {
+    const color = colors[15];
+    const cells = document.querySelectorAll('#grid .cell');
+    cells.forEach((cell) => {
+      cell.style.backgroundColor = color;
+    });
+
+    outputTextBox.value = '';
+});
+
+const fillButton = document.querySelector('#fill');
+
+// Fill button click event
+fillButton.addEventListener('click', () => {
     const selectedColorCell = document.querySelector('#color-grid .selected');
     const color = window.getComputedStyle(selectedColorCell).backgroundColor;
     const cells = document.querySelectorAll('#grid .cell');

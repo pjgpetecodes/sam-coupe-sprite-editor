@@ -26,7 +26,7 @@ function createColorGrid() {
         const colorCell = document.createElement('div');
         colorCell.classList.add('color-cell');
         colorCell.style.backgroundColor = colors[i];
-        if (i === 15) {
+        if (i === 0) {
             colorCell.classList.add('selected');
         }
         colorCell.addEventListener('click', () => {
@@ -38,8 +38,10 @@ function createColorGrid() {
     }
 }
 
-// set default color to white
-colorPicker.value = colors[15];
+function setSelectedColor(colorIndex) {
+    colorPicker.value = colors[colorIndex];
+}
 
-export { colors, createColorGrid }
+
+export { colors, createColorGrid, setSelectedColor }
   
