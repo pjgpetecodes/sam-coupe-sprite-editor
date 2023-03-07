@@ -75,9 +75,21 @@
     padding: 0;
     border: none;
   }
+
+  div#toolbox {
+    margin-left: 10px;
+    text-align: left;
+    min-width: 25%;
+}
+
+#output-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
   
-  div#output {
-    font-size: 12px;
+#output {
+    font-size: 10px;
     font-family: courier, courier new, serif;
     margin-left: 10px;
     text-align: left;

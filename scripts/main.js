@@ -35,7 +35,7 @@ convertButton.addEventListener('click', () => {
         bytes += byte;
     }
 
-    const hexArray = bytes.match(/.{1,32}/g);
+    const hexArray = bytes.match(/.{1,64}/g);
     let output = '';
 
     for (let i = 0; i < hexArray.length; i++) {
