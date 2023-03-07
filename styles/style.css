@@ -81,6 +81,8 @@ div#toolbox {
 	margin-left: 10px;
 	text-align: left;
 	min-width: 25%;
+	border: 1px solid black;
+	margin-bottom: 20px;
 }
 
 #output-container {
@@ -104,4 +106,27 @@ div#toolbox {
 	min-width: 20px;
 	display: inline-block;
 	margin-right: 10px;
+}
+
+.right-logo img {
+	width: 60px;
+	height: 75px;
+	align-content: right;
+}
+
+a.navbar-brand img {
+	width: 50%;
+}
+
+#main-title h2 {
+	color: white;
+}
+
+.navbar {
+	background-color: #0166F6;
+}
+
+#main-container {
+	margin-top: 20px;
+
 }
