@@ -87,7 +87,7 @@ convertButton.addEventListener('click', () => {
     for (let i = 0; i < cells.length; i += 2) {
         const highNibble = colors.indexOf(cells[i].style.backgroundColor).toString(16).toUpperCase();
         const lowNibble = colors.indexOf(cells[i + 1].style.backgroundColor).toString(16).toUpperCase();
-        const byte = (highNibble.length === 2 ? highNibble : '0' + highNibble) + (lowNibble.length === 2 ? lowNibble : '0' + lowNibble);
+        const byte = "0x" + highNibble + lowNibble;
         bytes += byte;
     }
 
@@ -95,8 +95,8 @@ convertButton.addEventListener('click', () => {
     let output = '';
 
     for (let i = 0; i < hexArray.length; i++) {
-    const linePrefix = `Sprite1_${i+1}:`.padEnd(14, ' ');
-    output += linePrefix + 'DEFB      ' + hexArray[i].match(/.{1,4}/g).join(', ') + '\n';
+        const linePrefix = `Sprite1_${i+1}:`.padEnd(14, ' ');
+        output += linePrefix + 'DEFB      ' + hexArray[i].match(/.{1,4}/g).join(', ') + '\n';
     }
 
     console.log(output);
