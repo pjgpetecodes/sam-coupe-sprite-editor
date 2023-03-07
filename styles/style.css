@@ -9,7 +9,7 @@
   }
   
   .container {
-    max-width: 960px;
+    max-width: 1920px;
     margin: 0 auto;
     text-align: center;
   }
@@ -33,6 +33,7 @@
     margin-right: 20px;
     margin-bottom: 20px;
     justify-self: center;
+    min-width: 25%;
   }
   
   #color-grid .color-cell {
@@ -46,8 +47,8 @@
   
   #grid {
     display: grid;
-    grid-template-columns: repeat(32, 30px);
-    grid-template-rows: repeat(32, 30px);
+    grid-template-columns: repeat(32, 20px);
+    grid-template-rows: repeat(32, 20px);
     gap: 1px;
     border: 1px solid black;
     margin-bottom: 20px;
@@ -75,3 +76,10 @@
     border: none;
   }
   
+  div#output {
+    font-size: 12px;
+    font-family: courier, courier new, serif;
+    margin-left: 10px;
+    text-align: left;
+    min-width: 25%;
+}
