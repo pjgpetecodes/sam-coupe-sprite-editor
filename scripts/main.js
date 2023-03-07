@@ -16,7 +16,7 @@ clearButton.addEventListener('click', () => {
     const color = colors[15];
     const cells = document.querySelectorAll('#grid .cell');
     cells.forEach((cell) => {
-      cell.style.backgroundColor = color;
+        cell.style.backgroundColor = color;
     });
 
     outputTextBox.value = '';
@@ -30,7 +30,7 @@ fillButton.addEventListener('click', () => {
     const color = window.getComputedStyle(selectedColorCell).backgroundColor;
     const cells = document.querySelectorAll('#grid .cell');
     cells.forEach((cell) => {
-      cell.style.backgroundColor = color;
+        cell.style.backgroundColor = color;
     });
 
     outputTextBox.value = '';
@@ -53,7 +53,7 @@ convertButton.addEventListener('click', () => {
     let output = '';
 
     for (let i = 0; i < hexArray.length; i++) {
-        const linePrefix = `Sprite1_${i+1}:`.padEnd(14, ' ');
+        const linePrefix = `Sprite1_${i + 1}:`.padEnd(14, ' ');
         output += linePrefix + 'DEFB      ' + hexArray[i].match(/.{1,4}/g).join(', ') + '\r\n';
     }
 
@@ -76,4 +76,54 @@ importButton.addEventListener('click', () => {
     });
 });
 
+// add event listeners to the next and previous buttons
+const nextButton = document.querySelector('#nextButton');
+const prevButton = document.querySelector('#prevButton');
 
+let currentGridIndex = 0;
+
+function createEmptyGrid() {
+    const grid = [];
+    const cells = document.querySelectorAll('.cell');
+    for (let i = 0; i < cells.length; i++) {
+        grid.push(15);
+    }
+    return grid;
+}
+
+let savedGrids = [createEmptyGrid(), createEmptyGrid(), createEmptyGrid(), createEmptyGrid(), createEmptyGrid(), createEmptyGrid(), createEmptyGrid(), createEmptyGrid(), createEmptyGrid(), createEmptyGrid(), createEmptyGrid(), createEmptyGrid(), createEmptyGrid(), createEmptyGrid(), createEmptyGrid(), createEmptyGrid()];
+
+// save the current grid to the savedGrids array
+function saveGrid() {
+    const cells = document.querySelectorAll('.cell');
+    const grid = [];
+    for (let i = 0; i < cells.length; i++) {
+        const colorIndex = colors.indexOf(RgbToHex(cells[i].style.backgroundColor));
+        grid.push(colorIndex);
+    }
+    savedGrids[currentGridIndex] = grid;
+}
+
+// load the current grid from the savedGrids array
+function loadGrid() {
+    const grid = savedGrids[currentGridIndex];
+    const cells = document.querySelectorAll('.cell');
+    for (let i = 0; i < cells.length; i++) {
+      const colorIndex = grid[i];
+      cells[i].style.backgroundColor = colors[colorIndex];
+    }
+  }
+
+// go to the next grid
+nextButton.addEventListener('click', () => {
+    saveGrid(); // save the current grid before moving to the next one
+    currentGridIndex = (currentGridIndex + 1) % savedGrids.length;
+    loadGrid();
+});
+
+// go to the previous grid
+prevButton.addEventListener('click', () => {
+    saveGrid(); // save the current grid before moving to the previous one
+    currentGridIndex = (currentGridIndex - 1 + savedGrids.length) % savedGrids.length;
+    loadGrid();
+});
