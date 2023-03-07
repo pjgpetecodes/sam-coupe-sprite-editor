@@ -93,5 +93,6 @@
     font-family: courier, courier new, serif;
     margin-left: 10px;
     text-align: left;
-    min-width: 25%;
+    min-width: 38%;
+    height: 375px;
 }

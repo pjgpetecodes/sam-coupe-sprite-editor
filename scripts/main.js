@@ -5,7 +5,7 @@ createGrid();
 setAllCellsToDefaultColor();
 createColorGrid();
 
-const outputDiv = document.querySelector('#output');
+const outputTextBox = document.querySelector('#output');
 
 const clearButton = document.querySelector('#clear');
 
@@ -18,11 +18,10 @@ clearButton.addEventListener('click', () => {
       cell.style.backgroundColor = color;
     });
 
-    outputDiv.innerHTML = '';
+    outputTextBox.value = '';
 });
 
 const convertButton = document.querySelector('#convert');
-
 
 // convert button click event
 convertButton.addEventListener('click', () => {
@@ -40,10 +39,26 @@ convertButton.addEventListener('click', () => {
 
     for (let i = 0; i < hexArray.length; i++) {
         const linePrefix = `Sprite1_${i+1}:`.padEnd(14, ' ');
-        output += linePrefix + 'DEFB      ' + hexArray[i].match(/.{1,4}/g).join(', ') + '<br/>';
+        output += linePrefix + 'DEFB      ' + hexArray[i].match(/.{1,4}/g).join(', ') + '\r\n';
     }
 
     console.log(output);
-    outputDiv.innerHTML = output;
+    outputTextBox.value = output;
 
-  });
+});
+
+const importButton = document.querySelector('#import');
+
+importButton.addEventListener('click', () => {
+    const hexValues = outputTextBox.value.match(/0x([0-9A-Fa-f]{2})/g);
+    const cells = document.querySelectorAll('.cell');
+    hexValues.forEach((hexValue, i) => {
+        const highNibble = parseInt(hexValue.charAt(2), 16);
+        const lowNibble = parseInt(hexValue.charAt(3), 16);
+        const cellIndex = i * 2;
+        cells[cellIndex].style.backgroundColor = colors[highNibble];
+        cells[cellIndex + 1].style.backgroundColor = colors[lowNibble];
+    });
+});
+
+
