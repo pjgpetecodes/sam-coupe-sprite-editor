@@ -4,7 +4,24 @@ const colorPicker = document.querySelector('#color-picker');
 const clearButton = document.querySelector('#clear');
 const convertButton = document.querySelector('#convert');
 
-const colors = ['#000000', '#1d2b53', '#7e2553', '#008751', '#ab5236', '#5f574f', '#c2c3c7', '#fff1e8', '#ff004d', '#ffa300', '#ffb6b0', '#ffd93f', '#94e044', '#a8e6ff', '#ff80c3', '#ffffff'];
+const colors = [
+    "#000000", // black
+    "#0000aa", // deep blue
+    "#aa0000", // deep red
+    "#aa00aa", // magneta (purple)
+    "#00aa00", // deep green
+    "#00aaaa", // cyan (light blue)
+    "#aa5500", // deep yellow
+    "#aaaaaa", // white
+    "#000000", // black
+    "#0000ff", // bright blue
+    "#ff0000", // bright red
+    "#ff00ff", // bright magneta
+    "#00ff00", // bright green
+    "#00ffff", // bright cyan
+    "#ffff00", // bright yellow
+    "#ffffff", // bright white
+  ];
 
 // create the color grid
 for (let i = 0; i < colors.length; i++) {
@@ -22,7 +39,6 @@ for (let i = 0; i < colors.length; i++) {
   colorGrid.appendChild(colorCell);
 }
 
-// create the main grid
 // create the main grid
 for (let i = 0; i < 1024; i++) {
     const cell = document.createElement('div');
@@ -56,13 +72,22 @@ convertButton.addEventListener('click', () => {
     const cells = document.querySelectorAll('.cell');
     let bytes = '';
     for (let i = 0; i < cells.length; i += 2) {
-      const highNibble = colors.indexOf(cells[i].style.backgroundColor).toString(16);
-      const lowNibble = colors.indexOf(cells[i + 1].style.backgroundColor).toString(16);
-      const byte = (highNibble.length === 2 ? highNibble : '0' + highNibble) + (lowNibble.length === 2 ? lowNibble : '0' + lowNibble);
-      bytes += byte;
+    const highNibble = colors.indexOf(cells[i].style.backgroundColor).toString(16).toUpperCase();
+    const lowNibble = colors.indexOf(cells[i + 1].style.backgroundColor).toString(16).toUpperCase();
+    const byte = (highNibble.length === 2 ? highNibble : '0' + highNibble) + (lowNibble.length === 2 ? lowNibble : '0' + lowNibble);
+    bytes += byte;
     }
+
     const hexArray = bytes.match(/.{1,32}/g);
-    console.log(hexArray);
+    let output = '';
+
+    for (let i = 0; i < hexArray.length; i++) {
+    const linePrefix = `Sprite1_${i+1}:`.padEnd(14, ' ');
+    output += linePrefix + 'DEFB      ' + hexArray[i].match(/.{1,4}/g).join(', ') + '\n';
+    }
+
+    console.log(output);
+
   });
   
 
