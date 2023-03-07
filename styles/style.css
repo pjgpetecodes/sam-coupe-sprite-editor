@@ -1,98 +1,107 @@
 * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-  }
-  
-  body {
-    font-family: sans-serif;
-  }
-  
-  .container {
-    max-width: 1920px;
-    margin: 0 auto;
-    text-align: center;
-  }
-  
-  h1 {
-    margin-bottom: 20px;
-  }
-  
-  .grid-container {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-  }
-  
-  #color-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 30px);
-    grid-template-rows: repeat(4, 30px);
-    gap: 1px;
-    border: 1px solid black;
-    margin-right: 20px;
-    margin-bottom: 20px;
-    justify-self: center;
-    min-width: 25%;
-  }
-  
-  #color-grid .color-cell {
-    background-color: white;
-    border: 1px solid #ddd;
-  }
-  
-  #color-grid .selected {
-    border: 2px solid black;
-  }
-  
-  #grid {
-    display: grid;
-    grid-template-columns: repeat(32, 20px);
-    grid-template-rows: repeat(32, 20px);
-    gap: 1px;
-    border: 1px solid black;
-    margin-bottom: 20px;
-    justify-self: center;
-  }
-  
-  #grid .cell {
-    background-color: white;
-    border: 1px solid black;
-  }
-  
-  #buttons {
-    margin-bottom: 20px;
-  }
-  
-  button {
-    margin-right: 10px;
-    padding: 10px;
-  }
-  
-  input[type="color"] {
-    width: 0;
-    height: 0;
-    padding: 0;
-    border: none;
-  }
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+}
 
-  div#toolbox {
-    margin-left: 10px;
-    text-align: left;
-    min-width: 25%;
+body {
+	font-family: sans-serif;
+}
+
+.container {
+	max-width: 1920px;
+	margin: 0 auto;
+	text-align: center;
+}
+
+h1 {
+	margin-bottom: 20px;
+}
+
+.grid-container {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+}
+
+#color-grid {
+	display: grid;
+	grid-template-columns: repeat(4, 30px);
+	grid-template-rows: repeat(4, 30px);
+	gap: 1px;
+	border: 1px solid black;
+	margin-right: 20px;
+	margin-bottom: 20px;
+	justify-self: center;
+	min-width: 25%;
+}
+
+#color-grid .color-cell {
+	background-color: white;
+	border: 1px solid #ddd;
+}
+
+#color-grid .selected {
+	border: 2px solid black;
+}
+
+#grid {
+	display: grid;
+	grid-template-columns: repeat(32, 20px);
+	grid-template-rows: repeat(32, 20px);
+	gap: 1px;
+	border: 1px solid black;
+	margin-bottom: 20px;
+	justify-self: center;
+}
+
+#grid .cell {
+	background-color: white;
+	border: 1px solid black;
+}
+
+#buttons,
+#navButtons {
+	margin-bottom: 20px;
+}
+
+button {
+	margin-right: 10px;
+	padding: 10px;
+}
+
+input[type="color"] {
+	width: 0;
+	height: 0;
+	padding: 0;
+	border: none;
+}
+
+div#toolbox {
+	margin-left: 10px;
+	text-align: left;
+	min-width: 25%;
 }
 
 #output-container {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
 }
-  
+
 #output {
-    font-size: 10px;
-    font-family: courier, courier new, serif;
-    margin-left: 10px;
-    text-align: left;
-    min-width: 38%;
-    height: 375px;
+	font-size: 10px;
+	font-family: courier, courier new, serif;
+	margin-left: 10px;
+	margin-bottom: 10px;
+	text-align: left;
+	min-width: 38%;
+	height: 375px;
+}
+
+#currentGrid {
+	max-width: 20px;
+	min-width: 20px;
+	display: inline-block;
+	margin-right: 10px;
 }

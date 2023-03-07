@@ -1,4 +1,4 @@
-import { createGrid, setAllCellsToDefaultColor, hexToRgb, RgbToHex } from './grid.js';
+import { createGrid, setAllCellsToDefaultColor, hexToRgb, RgbToHex, setFillingMode } from './grid.js';
 import { colors, createColorGrid, setSelectedColor } from './colors.js'
 
 createColorGrid();
@@ -6,8 +6,10 @@ createGrid();
 setSelectedColor(15);
 setAllCellsToDefaultColor();
 setSelectedColor(0);
+setFillingMode(0);
 
 const outputTextBox = document.querySelector('#output');
+const currentGridDiv = document.querySelector('#currentGrid');
 
 const clearButton = document.querySelector('#clear');
 
@@ -22,10 +24,10 @@ clearButton.addEventListener('click', () => {
     outputTextBox.value = '';
 });
 
-const fillButton = document.querySelector('#fill');
+const clearToColourButton = document.querySelector('#clearToColour');
 
 // Fill button click event
-fillButton.addEventListener('click', () => {
+clearToColourButton.addEventListener('click', () => {
     const selectedColorCell = document.querySelector('#color-grid .selected');
     const color = window.getComputedStyle(selectedColorCell).backgroundColor;
     const cells = document.querySelectorAll('#grid .cell');
@@ -34,6 +36,13 @@ fillButton.addEventListener('click', () => {
     });
 
     outputTextBox.value = '';
+});
+
+const fillButton = document.querySelector('#fill');
+
+// Fill button click event
+fillButton.addEventListener('click', () => {
+    setFillingMode(1);
 });
 
 const convertButton = document.querySelector('#convert');
@@ -112,6 +121,8 @@ function loadGrid() {
       const colorIndex = grid[i];
       cells[i].style.backgroundColor = colors[colorIndex];
     }
+
+    currentGridDiv.innerHTML = currentGridIndex;
   }
 
 // go to the next grid
