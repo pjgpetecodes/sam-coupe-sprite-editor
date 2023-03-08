@@ -47,8 +47,8 @@ h1 {
 
 #grid {
 	display: grid;
-	grid-template-columns: repeat(32, 20px);
-	grid-template-rows: repeat(32, 20px);
+	grid-template-columns: repeat(32, 21px);
+	grid-template-rows: repeat(32, 21px);
 	gap: 1px;
 	border: 1px solid black;
 	margin-bottom: 20px;
@@ -145,4 +145,13 @@ a.navbar-brand img {
 .grid-nav-button {
     margin: 5px;
     width: 41%;
+}
+
+.center-header {
+	text-align: center;
+	width: 96%;
+	background-color: #0166F6;
+	color: white;
+	padding: 10px;
+	margin: 5px;
 }
