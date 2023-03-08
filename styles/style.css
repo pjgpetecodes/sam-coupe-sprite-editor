@@ -155,3 +155,7 @@ a.navbar-brand img {
 	padding: 10px;
 	margin: 5px;
 }
+
+.small-hero-image {
+    width: 60%;
+}
