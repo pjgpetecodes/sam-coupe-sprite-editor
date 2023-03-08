@@ -1,4 +1,21 @@
-import { createGrid, setAllCellsToDefaultColor, clearCellsToColour, hexToRgb, RgbToHex, setFillingMode, moveGridLeft, moveGridRight, moveGridUp, moveGridDown, createEmptyGrids, nextGrid, previousGrid, generateSpriteData, importSpriteData } from './grid.js';
+import {    createGrid, 
+            setAllCellsToDefaultColor, 
+            clearCellsToColour, 
+            hexToRgb, 
+            RgbToHex, 
+            setFillingMode, 
+            moveGridLeft, 
+            moveGridRight, 
+            moveGridUp, 
+            moveGridDown, 
+            createEmptyGrids, 
+            nextGrid, 
+            previousGrid, 
+            generateSpriteData, 
+            importSpriteData,
+            setCutColumnMode,
+            setCutRowMode } from './grid.js';
+
 import { colors, createColorGrid, setSelectedColor } from './colors.js'
 
 const outputTextBox = document.querySelector('#output');
@@ -97,6 +114,22 @@ moveDownButton.addEventListener('click', () => {
 });
 
 /**
+ * Cut Column Button Click Event
+ */
+const cutColumnButton = document.querySelector('#cutColumn');
+cutColumnButton.addEventListener('click', () => {
+    setCutColumnMode(1);
+});
+
+/**
+ * Cut Row Button Click Event
+ */
+const cutRowButton = document.querySelector('#cutRow');
+cutRowButton.addEventListener('click', () => {
+    setCutRowMode(1);
+});
+
+/**
  * Main Application
  */
 createColorGrid();
@@ -106,3 +139,4 @@ setSelectedColor(15);
 setAllCellsToDefaultColor();
 setSelectedColor(0);
 setFillingMode(0);
+importSpriteData(outputTextBox.value);

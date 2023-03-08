@@ -3,7 +3,12 @@ import { colors } from './colors.js';
 let savedGrids = [];
 
 const fillButton = document.querySelector('#fill');
+const cutColumnButton = document.querySelector('#cutColumn');
+const cutRowButton = document.querySelector('#cutRow');
+
 var fillingMode = 0;
+var cutColumnMode = 0;
+var cutRowMode = 0;
 
 /**
  * Move the Grid to the Right
@@ -169,9 +174,21 @@ function createGrid() {
         const cell = document.createElement('div');
         cell.classList.add('cell');
         cell.originalColor = '';
+        const col = i % 32;
+        const row = Math.floor(i / 32);
+        
         cell.addEventListener('click', () => {
 
-            if (fillingMode == 0) {
+            if (fillingMode == 1) {
+                fillArea(cell);                
+            }
+            else if (cutColumnMode == 1) {
+                cutColumn(col);
+            }
+            else if (cutRowMode == 1) {
+                cutRow(row);
+            }
+            else {
                 const currentColor = cell.style.backgroundColor;
                 if (document.querySelector('#color-picker').value === RgbToHex(currentColor)) {
                     cell.style.backgroundColor = cell.dataset.previousColor;
@@ -179,9 +196,6 @@ function createGrid() {
                     cell.dataset.previousColor = currentColor;
                     cell.style.backgroundColor = document.querySelector('#color-picker').value;
                 }
-            }
-            else {
-                fillArea(cell);
             }
         });
         grid.appendChild(cell);
@@ -319,4 +333,116 @@ function importSpriteData(textData) {
     });
 }
 
-export { createGrid, setAllCellsToDefaultColor, clearCellsToColour, RgbToHex, hexToRgb, setFillingMode, moveGridLeft, moveGridRight, moveGridUp, moveGridDown, createEmptyGrids, nextGrid, previousGrid, generateSpriteData, importSpriteData };
+/**
+ * 
+ * Set The Cut Column Mode
+ * 
+ * @param {*} cutColumnModeValue 
+ */
+function setCutColumnMode(cutColumnModeValue) {
+
+    if (cutColumnModeValue == 1) {
+        cutColumnButton.style.backgroundColor = "red";
+        setAllCellsPointer("url('images/cutCursor.cur'), auto");
+    }
+    else {
+        cutColumnButton.style.backgroundColor = "buttonface";
+        setAllCellsPointer("default");
+    }
+
+    cutColumnMode = cutColumnModeValue;
+}
+
+/**
+ * 
+ * Cut the Selected Column
+ * 
+ * @param {*} columnIndex 
+ */
+function cutColumn(columnIndex) {
+    saveGrid();
+
+    const grid = savedGrids[currentGridIndex];
+    for (let col = columnIndex; col < 31; col++) {
+        for (let row = 0; row < 32; row++) {
+            const index = row * 32 + col;
+            const nextIndex = row * 32 + col + 1;
+            grid[index] = grid[nextIndex];
+        }
+    }
+
+    // clear the last column
+    for (let row = 0; row < 32; row++) {
+        const index = row * 32 + 31;
+        grid[index] = 15;
+    }
+
+    loadGrid();
+
+    setCutColumnMode(0);
+}
+
+/**
+ * 
+ * Set The Cut Row Mode
+ * 
+ * @param {*} cutColumnModeValue 
+ */
+function setCutRowMode(cutRowModeValue) {
+
+    if (cutRowModeValue == 1) {
+        cutRowButton.style.backgroundColor = "red";
+        setAllCellsPointer("url('images/cutCursor.cur'), auto");
+    }
+    else {
+        cutRowButton.style.backgroundColor = "buttonface";
+        setAllCellsPointer("default");
+    }
+
+    cutRowMode = cutRowModeValue;
+}
+
+/**
+ * 
+ * Cut the Selected Row
+ * 
+ * @param {*} rowIndex 
+ */
+function cutRow(rowIndex) {
+    saveGrid();
+
+    const grid = savedGrids[currentGridIndex];
+    for (let i = rowIndex * 32; i < (rowIndex + 1) * 32; i++) {
+        grid[i] = -1;
+    }
+
+    for (let i = (rowIndex + 1) * 32; i < grid.length; i++) {
+        const prevIndex = i - 32;
+        grid[prevIndex] = grid[i];
+        grid[i] = -1;
+    }
+
+    loadGrid();
+
+    setCutRowMode(0);
+}
+
+export {
+    createGrid,
+    setAllCellsToDefaultColor,
+    clearCellsToColour,
+    RgbToHex,
+    hexToRgb,
+    setFillingMode,
+    moveGridLeft,
+    moveGridRight,
+    moveGridUp,
+    moveGridDown,
+    createEmptyGrids,
+    nextGrid,
+    previousGrid,
+    generateSpriteData,
+    importSpriteData,
+    setCutColumnMode,
+    setCutRowMode
+};
