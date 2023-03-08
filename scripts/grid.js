@@ -1,5 +1,6 @@
 import { colors } from './colors.js';
 
+const fillButton = document.querySelector('#fill');
 var fillingMode = 0;
 
 function setFillingMode(fillingModeValue) {
@@ -7,10 +8,12 @@ function setFillingMode(fillingModeValue) {
 
     if (fillingMode == 1)
     {
+        fillButton.style.backgroundColor = "red";
         setAllCellsPointer("pointer");
     }
     else
     {
+        fillButton.style.backgroundColor = "buttonface";
         setAllCellsPointer("default");
     }
 }

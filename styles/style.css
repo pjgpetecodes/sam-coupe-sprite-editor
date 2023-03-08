@@ -26,8 +26,8 @@ h1 {
 
 #color-grid {
 	display: grid;
-	grid-template-columns: repeat(4, 30px);
-	grid-template-rows: repeat(4, 30px);
+	grid-template-columns: repeat(4, 68px);
+	grid-template-rows: repeat(4, 68px);
 	gap: 1px;
 	border: 1px solid black;
 	margin-right: 20px;
@@ -97,15 +97,15 @@ div#toolbox {
 	margin-left: 10px;
 	margin-bottom: 10px;
 	text-align: left;
-	min-width: 38%;
-	height: 375px;
+	min-width: 67%;
+	height: 520px;
 }
 
 #currentGrid {
 	max-width: 20px;
 	min-width: 20px;
 	display: inline-block;
-	margin-right: 10px;
+	text-align: center;
 }
 
 .right-logo img {
@@ -120,6 +120,7 @@ a.navbar-brand img {
 
 #main-title h2 {
 	color: white;
+	padding-top: 24px;
 }
 
 .navbar {
@@ -129,4 +130,14 @@ a.navbar-brand img {
 #main-container {
 	margin-top: 20px;
 
+}
+
+.full-width-button {
+    width: 96%;
+	margin: 5px;
+}
+
+.grid-nav-button {
+    margin: 5px;
+    width: 41%;
 }
