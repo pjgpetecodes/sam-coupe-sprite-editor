@@ -1,34 +1,106 @@
 import { colors } from './colors.js';
 
+let savedGrids = [];
+
 const fillButton = document.querySelector('#fill');
 var fillingMode = 0;
 
-function moveGridRight() {
+/**
+ * Move the Grid to the Right
+ */
+function moveGridLeft() {
+
+    saveGrid();
 
     // shift the values in each row to the right
-    const grid = document.querySelector('#grid');
+    const grid = savedGrids[currentGridIndex];
+
+    // shift the color values of each cell to the left
     for (let i = 0; i < grid.length; i++) {
-        const row = grid[i];
-        row.unshift(row.pop());
+        const row = Math.floor(i / 32);
+        const col = i % 32;
+        // shift the other cells to the left
+        const index = row * 32 + col;
+        grid[index - 1] = grid[index];
     }
 
-    // update the cell background colors based on the new grid values
-    const cells = document.querySelectorAll('.cell');
-    for (let i = 0; i < cells.length; i++) {
-        const row = Math.floor(i / 16);
-        const col = i % 16;
-        const colorIndex = grid[row][col];
-        const color = colors[colorIndex];
-        cells[i].style.backgroundColor = color;
-    }
+    loadGrid();
 }
 
+function moveGridRight() {
+    saveGrid();
+
+    // shift the values in each row to the right
+    const grid = savedGrids[currentGridIndex];
+
+    // shift the color values of each cell to the right
+    for (let i = grid.length - 1; i >= 0; i--) {
+        const row = Math.floor(i / 32);
+        const col = i % 32;
+        // shift the other cells to the right
+        const index = row * 32 + col;
+        grid[index + 1] = grid[index];
+    }
+
+    loadGrid();
+}
+
+/**
+ * Move the Grid Up
+ */
+function moveGridUp() {
+    saveGrid();
+
+    // shift the values in each column up
+    const grid = savedGrids[currentGridIndex];
+
+    // shift the color values of each cell up
+    for (let col = 0; col < 32; col++) {
+        const temp = grid[col];
+        for (let row = 1; row < 32; row++) {
+            const index = row * 32 + col;
+            grid[index - 32] = grid[index];
+        }
+        grid[992 + col] = temp;
+    }
+
+    loadGrid();
+}
+
+/**
+ * Move the Grid Down
+ */
+function moveGridDown() {
+    saveGrid();
+
+    // shift the values in each column down
+    const grid = savedGrids[currentGridIndex];
+
+    // shift the color values of each cell down
+    for (let col = 0; col < 32; col++) {
+        const temp = grid[992 + col];
+        for (let row = 30; row >= 0; row--) {
+            const index = row * 32 + col;
+            grid[index + 32] = grid[index];
+        }
+        grid[col] = temp;
+    }
+
+    loadGrid();
+}
+
+/**
+ * 
+ * Set Fill Mode On or Off
+ * 
+ * @param {*} fillingModeValue 
+ */
 function setFillingMode(fillingModeValue) {
     fillingMode = fillingModeValue;
 
     if (fillingMode == 1) {
         fillButton.style.backgroundColor = "red";
-        setAllCellsPointer("pointer");
+        setAllCellsPointer("url('images/cursor.cur'), auto");
     }
     else {
         fillButton.style.backgroundColor = "buttonface";
@@ -36,6 +108,14 @@ function setFillingMode(fillingModeValue) {
     }
 }
 
+/**
+ * 
+ * Set all Cells to have the Pointer Cursor
+ * 
+ * (Used to set in fill mode)
+ * 
+ * @param {*} pointer 
+ */
 function setAllCellsPointer(pointer) {
     const cells = document.querySelectorAll('#grid .cell');
     cells.forEach((cell) => {
@@ -108,6 +188,15 @@ function createGrid() {
     }
 }
 
+/**
+ * Create the Empty Grids
+ */
+function createEmptyGrids() {
+    for (let i = 0; i < 16; i++) {
+        savedGrids.push(createEmptyGrid());
+    }
+}
+
 function setAllCellsToDefaultColor() {
     const cells = document.querySelectorAll('.cell');
     cells.forEach((cell) => {
@@ -115,7 +204,7 @@ function setAllCellsToDefaultColor() {
     });
 }
 
-function clearCells() {
+function clearCellsToColour() {
     const selectedColorCell = document.querySelector('#color-grid .selected');
     const color = window.getComputedStyle(selectedColorCell).backgroundColor;
     const cells = document.querySelectorAll('#grid .cell');
@@ -138,5 +227,96 @@ function hexToRgb(hex) {
     return result ? `rgb(${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(result[3], 16)})` : null;
 }
 
+let currentGridIndex = 0;
+const currentGridDiv = document.querySelector('#currentGrid');
 
-export { createGrid, setAllCellsToDefaultColor, clearCells, RgbToHex, hexToRgb, setFillingMode, moveGridRight };
+function createEmptyGrid() {
+    const grid = [];
+    const cells = document.querySelectorAll('.cell');
+    for (let i = 0; i < cells.length; i++) {
+        grid.push(15);
+    }
+    return grid;
+}
+
+// save the current grid to the savedGrids array
+function saveGrid() {
+    const cells = document.querySelectorAll('.cell');
+    const grid = [];
+    for (let i = 0; i < cells.length; i++) {
+        const colorIndex = colors.indexOf(RgbToHex(cells[i].style.backgroundColor));
+        grid.push(colorIndex);
+    }
+    savedGrids[currentGridIndex] = grid;
+}
+
+// load the current grid from the savedGrids array
+function loadGrid() {
+    const grid = savedGrids[currentGridIndex];
+    const cells = document.querySelectorAll('.cell');
+    for (let i = 0; i < cells.length; i++) {
+        const colorIndex = grid[i];
+        cells[i].style.backgroundColor = colors[colorIndex];
+    }
+
+    currentGridDiv.innerHTML = currentGridIndex;
+}
+
+/**
+ * Move to the Next Grid
+ */
+function nextGrid() {
+    saveGrid(); // save the current grid before moving to the next one
+    currentGridIndex = (currentGridIndex + 1) % savedGrids.length;
+    loadGrid();
+}
+
+/**
+ * Move to the Previous Grid
+ */
+function previousGrid() {
+    saveGrid(); // save the current grid before moving to the previous one
+    currentGridIndex = (currentGridIndex - 1 + savedGrids.length) % savedGrids.length;
+    loadGrid();
+}
+
+function generateSpriteData() {
+    const cells = document.querySelectorAll('.cell');
+    let bytes = '';
+    for (let i = 0; i < cells.length; i += 2) {
+        const highNibble = colors.indexOf(RgbToHex(cells[i].style.backgroundColor)).toString(16).toUpperCase();
+        const lowNibble = colors.indexOf(RgbToHex(cells[i + 1].style.backgroundColor)).toString(16).toUpperCase();
+        const byte = "0x" + highNibble + lowNibble;
+        bytes += byte;
+    }
+
+    const hexArray = bytes.match(/.{1,64}/g);
+    let output = '';
+
+    for (let i = 0; i < hexArray.length; i++) {
+        const linePrefix = `Sprite1_${i + 1}:`.padEnd(14, ' ');
+        output += linePrefix + 'DEFB      ' + hexArray[i].match(/.{1,4}/g).join(', ') + '\r\n';
+    }
+
+    return output;
+}
+
+/**
+ * 
+ * Import Sprite Data to the Grid
+ * 
+ * @param {*} textData 
+ */
+function importSpriteData(textData) {
+    const hexValues = textData.match(/0x([0-9A-Fa-f]{2})/g);
+    const cells = document.querySelectorAll('.cell');
+    hexValues.forEach((hexValue, i) => {
+        const highNibble = parseInt(hexValue.charAt(2), 16);
+        const lowNibble = parseInt(hexValue.charAt(3), 16);
+        const cellIndex = i * 2;
+        cells[cellIndex].style.backgroundColor = colors[highNibble];
+        cells[cellIndex + 1].style.backgroundColor = colors[lowNibble];
+    });
+}
+
+export { createGrid, setAllCellsToDefaultColor, clearCellsToColour, RgbToHex, hexToRgb, setFillingMode, moveGridLeft, moveGridRight, moveGridUp, moveGridDown, createEmptyGrids, nextGrid, previousGrid, generateSpriteData, importSpriteData };
