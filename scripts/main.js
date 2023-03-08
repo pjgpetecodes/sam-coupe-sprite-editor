@@ -1,4 +1,4 @@
-import { createGrid, setAllCellsToDefaultColor, hexToRgb, RgbToHex, setFillingMode } from './grid.js';
+import { createGrid, setAllCellsToDefaultColor, hexToRgb, RgbToHex, setFillingMode, moveGridRight } from './grid.js';
 import { colors, createColorGrid, setSelectedColor } from './colors.js'
 
 createColorGrid();
@@ -137,4 +137,11 @@ prevButton.addEventListener('click', () => {
     saveGrid(); // save the current grid before moving to the previous one
     currentGridIndex = (currentGridIndex - 1 + savedGrids.length) % savedGrids.length;
     loadGrid();
+});
+
+const moveRightButton = document.querySelector('#moveRight');
+
+// Move Right button click event
+moveRightButton.addEventListener('click', () => {
+    moveGridRight();
 });

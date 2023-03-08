@@ -137,6 +137,11 @@ a.navbar-brand img {
 	margin: 5px;
 }
 
+.half-width-button {
+    width: 45%;
+    margin: 5px;
+}
+
 .grid-nav-button {
     margin: 5px;
     width: 41%;

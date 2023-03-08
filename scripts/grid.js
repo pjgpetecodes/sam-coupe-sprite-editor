@@ -3,23 +3,40 @@ import { colors } from './colors.js';
 const fillButton = document.querySelector('#fill');
 var fillingMode = 0;
 
+function moveGridRight() {
+
+    // shift the values in each row to the right
+    const grid = document.querySelector('#grid');
+    for (let i = 0; i < grid.length; i++) {
+        const row = grid[i];
+        row.unshift(row.pop());
+    }
+
+    // update the cell background colors based on the new grid values
+    const cells = document.querySelectorAll('.cell');
+    for (let i = 0; i < cells.length; i++) {
+        const row = Math.floor(i / 16);
+        const col = i % 16;
+        const colorIndex = grid[row][col];
+        const color = colors[colorIndex];
+        cells[i].style.backgroundColor = color;
+    }
+}
+
 function setFillingMode(fillingModeValue) {
     fillingMode = fillingModeValue;
 
-    if (fillingMode == 1)
-    {
+    if (fillingMode == 1) {
         fillButton.style.backgroundColor = "red";
         setAllCellsPointer("pointer");
     }
-    else
-    {
+    else {
         fillButton.style.backgroundColor = "buttonface";
         setAllCellsPointer("default");
     }
 }
 
-function setAllCellsPointer(pointer)
-{
+function setAllCellsPointer(pointer) {
     const cells = document.querySelectorAll('#grid .cell');
     cells.forEach((cell) => {
         cell.style.cursor = pointer;
@@ -53,7 +70,7 @@ function fillArea(cell) {
         }
 
         currentCell.style.backgroundColor = colorToFill;
-            
+
         if (col > 0) fill(row, col - 1); // left
         if (row > 0) fill(row - 1, col); // top
         if (col < 31) fill(row, col + 1); // right
@@ -122,4 +139,4 @@ function hexToRgb(hex) {
 }
 
 
-export { createGrid, setAllCellsToDefaultColor, clearCells, RgbToHex, hexToRgb, setFillingMode };
+export { createGrid, setAllCellsToDefaultColor, clearCells, RgbToHex, hexToRgb, setFillingMode, moveGridRight };
