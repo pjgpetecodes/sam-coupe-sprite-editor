@@ -2,7 +2,7 @@
 
 This code is a simple SAM Coupe Sprite Editor that allows you to design Sprites for the SAM Coupe using it's standard Pallete and export them as Sprite Data.
 
-![image](images/screenshot1.png)
+![image](images/screenshot2.png)
 
 ## How to use
 
