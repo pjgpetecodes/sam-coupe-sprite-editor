@@ -14,6 +14,10 @@ body {
 	text-align: center;
 }
 
+#main-container {
+	max-width: 1140px;
+}
+
 h1 {
 	margin-bottom: 20px;
 }
@@ -133,18 +137,18 @@ a.navbar-brand img {
 }
 
 .full-width-button {
-    width: 96%;
+	width: 96%;
 	margin: 5px;
 }
 
 .half-width-button {
-    width: 45%;
-    margin: 5px;
+	width: 45%;
+	margin: 5px;
 }
 
 .grid-nav-button {
-    margin: 5px;
-    width: 41%;
+	margin: 5px;
+	width: 41%;
 }
 
 .center-header {
@@ -157,5 +161,71 @@ a.navbar-brand img {
 }
 
 .small-hero-image {
-    width: 60%;
+	width: 60%;
+}
+
+/*
+
+Media Styles
+
+*/
+
+@media (max-width: 1360px) {
+	.grid-container {
+		display: flex;
+		flex-wrap: wrap;
+	}
+
+	#color-grid {
+		order: 2;
+		width: 40%;
+		margin-top: 1rem;
+		grid-template-columns: repeat(4, 100px);
+		grid-template-rows: repeat(4, 100px);
+		min-width: 40%
+	}
+
+	#grid {
+		order: 1;
+		margin: 0 auto;
+		width: 100%;
+		grid-template-columns: repeat(32, 28px);
+		grid-template-rows: repeat(32, 28px);
+	}
+
+	#toolbox {
+		order: 3;
+		width: 30%;
+		margin-top: 1rem;
+		min-width: 20%;
+		font-size: 20px;
+	}
+	
+	.container {
+		max-width: 100%;
+	}
+
+
+}
+
+@media (max-width: 1200px) {
+	#color-grid {
+		width: 40%;
+		grid-template-columns: repeat(4, 100px);
+		grid-template-rows: repeat(4, 100px);
+		min-width: 40%
+	}
+
+	#grid {
+		width: 74%;
+	}
+
+	#toolbox {
+		width: 30%;
+		min-width: 30%;
+	}
+
+	.container {
+		max-width: 100%;
+	}
 }
