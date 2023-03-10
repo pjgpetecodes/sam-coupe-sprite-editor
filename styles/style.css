@@ -89,13 +89,13 @@ div#toolbox {
 	margin-bottom: 20px;
 }
 
-#output-container {
+#output-container, #mask-output-container {
 	display: flex;
 	flex-direction: row;
 	justify-content: center;
 }
 
-#output {
+#sprite-output, #mask-output {
 	font-size: 10px;
 	font-family: courier, courier new, serif;
 	margin-left: 10px;

@@ -3,12 +3,18 @@ import { colors } from './colors.js';
 let savedGrids = [];
 
 const fillButton = document.querySelector('#fill');
+const transparencyFillButton = document.querySelector('#fillTransparency');
 const cutColumnButton = document.querySelector('#cutColumn');
 const cutRowButton = document.querySelector('#cutRow');
 
+let currentGridIndex = 0;
+const currentGridDiv = document.querySelector('#currentGrid');
+
 var fillingMode = 0;
+var transparencyFillingMode = 0;
 var cutColumnMode = 0;
 var cutRowMode = 0;
+var mouseIsDown = false;
 
 /**
  * Move the Grid to the Right
@@ -115,6 +121,25 @@ function setFillingMode(fillingModeValue) {
 
 /**
  * 
+ * Set Fill Mode On or Off
+ * 
+ * @param {*} TransparencyFillingModeValue 
+ */
+function setFillingTransparencyMode(TransparencyFillingModeValue) {
+    transparencyFillingMode = TransparencyFillingModeValue;
+
+    if (transparencyFillingMode == 1) {
+        transparencyFillButton.style.backgroundColor = "red";
+        setAllCellsPointer("url('images/cursor.cur'), auto");
+    }
+    else {
+        transparencyFillButton.style.backgroundColor = "buttonface";
+        setAllCellsPointer("default");
+    }
+}
+
+/**
+ * 
  * Set all Cells to have the Pointer Cursor
  * 
  * (Used to set in fill mode)
@@ -129,7 +154,9 @@ function setAllCellsPointer(pointer) {
 }
 
 function fillArea(cell) {
-    const colorToFill = document.querySelector('#color-picker').value;
+
+    var colorToFill = document.querySelector('#color-picker').value;
+
     const cells = document.querySelectorAll('.cell');
 
     const index = Array.from(cells).indexOf(cell);
@@ -148,13 +175,15 @@ function fillArea(cell) {
         }
         visited.add(cellIndex);
 
-        const currentColor = RgbToHex(currentCell.style.backgroundColor);
+        var currentColor = RgbToHex(currentCell.style.backgroundColor);
 
         if (currentColor !== originalCellColour) {
             return;
         }
 
         currentCell.style.backgroundColor = colorToFill;
+        currentCell.style.backgroundImage = '';
+        currentCell.dataset.isNotSprite = false;
 
         if (col > 0) fill(row, col - 1); // left
         if (row > 0) fill(row - 1, col); // top
@@ -168,6 +197,47 @@ function fillArea(cell) {
 
 }
 
+function fillAreaWithTransparency(cell) {
+
+    const cells = document.querySelectorAll('.cell');
+
+    const index = Array.from(cells).indexOf(cell);
+    const row = Math.floor(index / 32);
+    const col = index % 32;
+
+    const visited = new Set();
+
+    const originalCellColour = RgbToHex(cell.style.backgroundColor);
+
+    function fillWithTransparency(row, col) {
+        const cellIndex = row * 32 + col;
+        const currentCell = cells[cellIndex];
+        if (visited.has(cellIndex)) {
+            return;
+        }
+        visited.add(cellIndex);
+
+        var currentColor = RgbToHex(currentCell.style.backgroundColor);
+
+        if (currentColor !== originalCellColour) {
+            return;
+        }
+
+        currentCell.style.backgroundImage = 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'10\' height=\'10\' viewBox=\'0 0 10 10\'%3E%3Cline x1=\'0\' y1=\'0\' x2=\'10\' y2=\'10\' stroke=\'red\' stroke-width=\'1\'/%3E%3C/svg%3E")';
+        currentCell.dataset.isNotSprite = true;
+
+        if (col > 0) fillWithTransparency(row, col - 1); // left
+        if (row > 0) fillWithTransparency(row - 1, col); // top
+        if (col < 31) fillWithTransparency(row, col + 1); // right
+        if (row < 31) fillWithTransparency(row + 1, col); // bottom
+    }
+
+    fillWithTransparency(row, col);
+
+    setFillingTransparencyMode(0);
+
+}
+
 function createGrid() {
     const grid = document.querySelector('#grid');
     for (let i = 0; i < 1024; i++) {
@@ -176,11 +246,67 @@ function createGrid() {
         cell.originalColor = '';
         const col = i % 32;
         const row = Math.floor(i / 32);
-        
+
+        // added mouse events
+        cell.addEventListener('mousedown', (event) => {
+            event.preventDefault();
+
+            if (fillingMode == 1) {
+                mouseIsDown = false;
+            }
+            else if (transparencyFillingMode == 1) {
+                mouseIsDown = false;
+            }
+            else if (cutColumnMode == 1) {
+                mouseIsDown = false;
+            }
+            else if (cutRowMode == 1) {
+                mouseIsDown = false;
+            }
+            else {
+                mouseIsDown = true;
+                cell.style.backgroundColor = document.querySelector('#color-picker').value;
+                cell.dataset.isNotSprite = false;
+                cell.style.backgroundImage = '';          
+        }
+
+        });
+
+        cell.addEventListener('mouseover', (event) => {
+            event.preventDefault();
+
+            if (fillingMode == 1) {
+                mouseIsDown = false;
+            }
+            else if (transparencyFillingMode == 1) {
+                mouseIsDown = false;
+            }
+            else if (cutColumnMode == 1) {
+                mouseIsDown = false;
+            }
+            else if (cutRowMode == 1) {
+                mouseIsDown = false;
+            }
+            else {
+                if (mouseIsDown) {
+                    cell.style.backgroundColor = document.querySelector('#color-picker').value;
+                    cell.dataset.isNotSprite = false;
+                    cell.style.backgroundImage = '';          
+                }
+            }
+        });
+
+        cell.addEventListener('mouseup', () => {
+            mouseIsDown = false;
+        });
+
         cell.addEventListener('click', () => {
 
             if (fillingMode == 1) {
-                fillArea(cell);                
+                fillArea(cell);
+            }
+            else if (transparencyFillingMode == 1) {
+                fillAreaWithTransparency(cell);
             }
             else if (cutColumnMode == 1) {
                 cutColumn(col);
@@ -190,6 +316,9 @@ function createGrid() {
             }
             else {
                 const currentColor = cell.style.backgroundColor;
+                cell.style.backgroundImage = '';            
+                cell.dataset.isNotSprite = false;
+
                 if (document.querySelector('#color-picker').value === RgbToHex(currentColor)) {
                     cell.style.backgroundColor = cell.dataset.previousColor;
                 } else {
@@ -241,8 +370,6 @@ function hexToRgb(hex) {
     return result ? `rgb(${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(result[3], 16)})` : null;
 }
 
-let currentGridIndex = 0;
-const currentGridDiv = document.querySelector('#currentGrid');
 
 function createEmptyGrid() {
     const grid = [];
@@ -308,7 +435,43 @@ function generateSpriteData() {
     let output = '';
 
     for (let i = 0; i < hexArray.length; i++) {
-        const linePrefix = `Sprite1_${i + 1}:`.padEnd(14, ' ');
+        const linePrefix = `Sprite${currentGridIndex}_${i + 1}:`.padEnd(14, ' ');
+        output += linePrefix + 'DEFB      ' + hexArray[i].match(/.{1,4}/g).join(', ') + '\r\n';
+    }
+
+    return output;
+}
+
+function generateMaskData() {
+    const cells = document.querySelectorAll('.cell');
+    let bytes = '';
+    for (let i = 0; i < cells.length; i += 2) {
+
+        var highNibble;
+        if (cells[i].dataset.isNotSprite == 'true') {
+            highNibble = 'F';
+        }
+        else {
+            highNibble = '0'
+        }
+
+        var lowNibble;
+        if (cells[i + 1].dataset.isNotSprite == 'true') {
+            lowNibble = 'F';
+        }
+        else {
+            lowNibble = '0'
+        }
+
+        const byte = "0x" + highNibble + lowNibble;
+        bytes += byte;
+    }
+
+    const hexArray = bytes.match(/.{1,64}/g);
+    let output = '';
+
+    for (let i = 0; i < hexArray.length; i++) {
+        const linePrefix = `Sprite${currentGridIndex}_Mask_${i + 1}:`.padEnd(14, ' ');
         output += linePrefix + 'DEFB      ' + hexArray[i].match(/.{1,4}/g).join(', ') + '\r\n';
     }
 
@@ -319,10 +482,10 @@ function generateSpriteData() {
  * 
  * Import Sprite Data to the Grid
  * 
- * @param {*} textData 
+ * @param {*} spriteTextData 
  */
-function importSpriteData(textData) {
-    const hexValues = textData.match(/0x([0-9A-Fa-f]{2})/g);
+function importSpriteData(spriteTextData) {
+    const hexValues = spriteTextData.match(/0x([0-9A-Fa-f]{2})/g);
     const cells = document.querySelectorAll('.cell');
     hexValues.forEach((hexValue, i) => {
         const highNibble = parseInt(hexValue.charAt(2), 16);
@@ -330,6 +493,45 @@ function importSpriteData(textData) {
         const cellIndex = i * 2;
         cells[cellIndex].style.backgroundColor = colors[highNibble];
         cells[cellIndex + 1].style.backgroundColor = colors[lowNibble];
+    });
+}
+
+/**
+ * 
+ * Import Sprite Mask Data to the Grid
+ * 
+ * @param {*} maskTextData 
+ */
+function importSpriteMaskData(maskTextData) {
+    const hexValues = maskTextData.match(/0x([0-9A-Fa-f]{2})/g);
+    const cells = document.querySelectorAll('.cell');
+    hexValues.forEach((hexValue, i) => {
+        const highNibble = parseInt(hexValue.charAt(2), 16);
+        const lowNibble = parseInt(hexValue.charAt(3), 16);
+        const cellIndex = i * 2;
+
+        if (highNibble == 15)
+        {
+            cells[cellIndex].style.backgroundImage = 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'10\' height=\'10\' viewBox=\'0 0 10 10\'%3E%3Cline x1=\'0\' y1=\'0\' x2=\'10\' y2=\'10\' stroke=\'red\' stroke-width=\'1\'/%3E%3C/svg%3E")';
+            cells[cellIndex].dataset.isNotSprite = true;
+        }
+        else
+        {
+            cells[cellIndex].style.backgroundImage = '';
+            cells[cellIndex].dataset.isNotSprite = false;
+        }
+
+        if (lowNibble == 15)
+        {
+            cells[cellIndex + 1].style.backgroundImage = 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'10\' height=\'10\' viewBox=\'0 0 10 10\'%3E%3Cline x1=\'0\' y1=\'0\' x2=\'10\' y2=\'10\' stroke=\'red\' stroke-width=\'1\'/%3E%3C/svg%3E")';
+            cells[cellIndex + 1].dataset.isNotSprite = true;
+        }
+        else
+        {
+            cells[cellIndex + 1].style.backgroundImage = '';
+            cells[cellIndex + 1].dataset.isNotSprite = false;
+        }
+
     });
 }
 
@@ -434,6 +636,7 @@ export {
     RgbToHex,
     hexToRgb,
     setFillingMode,
+    setFillingTransparencyMode,
     moveGridLeft,
     moveGridRight,
     moveGridUp,
@@ -442,7 +645,9 @@ export {
     nextGrid,
     previousGrid,
     generateSpriteData,
+    generateMaskData,
     importSpriteData,
+    importSpriteMaskData,
     setCutColumnMode,
     setCutRowMode
 };

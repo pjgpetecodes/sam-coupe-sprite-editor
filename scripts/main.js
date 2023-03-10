@@ -3,7 +3,8 @@ import {    createGrid,
             clearCellsToColour, 
             hexToRgb, 
             RgbToHex, 
-            setFillingMode, 
+            setFillingMode,
+            setFillingTransparencyMode, 
             moveGridLeft, 
             moveGridRight, 
             moveGridUp, 
@@ -12,13 +13,17 @@ import {    createGrid,
             nextGrid, 
             previousGrid, 
             generateSpriteData, 
+            generateMaskData,
             importSpriteData,
+            importSpriteMaskData,
             setCutColumnMode,
             setCutRowMode } from './grid.js';
 
 import { colors, createColorGrid, setSelectedColor } from './colors.js'
 
-const outputTextBox = document.querySelector('#output');
+const spriteOutputTextBox = document.querySelector('#sprite-output');
+const maskOutputTextBox = document.querySelector('#mask-output');
+
 
 /**
  * Clear button click event
@@ -37,7 +42,6 @@ clearToColourButton.addEventListener('click', () => {
     clearCellsToColour();
 });
 
-// 
 /**
  * Fill button Click Event
  */
@@ -46,15 +50,27 @@ fillButton.addEventListener('click', () => {
     setFillingMode(1);
 });
 
+/**
+ * Fill button Click Event
+ */
+const fillTransparencyButton = document.querySelector('#fillTransparency');
+fillTransparencyButton.addEventListener('click', () => {
+    setFillingTransparencyMode(1);
+});
 
 /**
  * Generate Sprite Data Click Event
  */
 const generateSpriteDataButton = document.querySelector('#convert');
 generateSpriteDataButton.addEventListener('click', () => {    
-    var output = generateSpriteData();
-    console.log(output);
-    outputTextBox.value = output;
+    var spriteOutput = generateSpriteData();
+    console.log(spriteOutput);
+    spriteOutputTextBox.value = spriteOutput;
+
+    var maskOutput = generateMaskData();
+    console.log(maskOutput);
+    maskOutputTextBox.value = maskOutput;
+
 });
 
 /**
@@ -62,7 +78,8 @@ generateSpriteDataButton.addEventListener('click', () => {
  */
 const importButton = document.querySelector('#import');
 importButton.addEventListener('click', () => {
-    importSpriteData(outputTextBox.value);
+    importSpriteData(spriteOutputTextBox.value);
+    importSpriteMaskData(maskOutputTextBox.value);
 });
 
 /**
@@ -139,4 +156,5 @@ setSelectedColor(15);
 setAllCellsToDefaultColor();
 setSelectedColor(0);
 setFillingMode(0);
-importSpriteData(outputTextBox.value);
+importSpriteData(spriteOutputTextBox.value);
+importSpriteMaskData(maskOutputTextBox.value);
