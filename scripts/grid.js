@@ -344,6 +344,8 @@ function setAllCellsToDefaultColor() {
     const cells = document.querySelectorAll('.cell');
     cells.forEach((cell) => {
         cell.style.backgroundColor = colors[15];
+        cell.style.backgroundImage = '';       
+        cell.dataset.isNotSprite = false;
     });
 }
 
@@ -353,6 +355,8 @@ function clearCellsToColour() {
     const cells = document.querySelectorAll('#grid .cell');
     cells.forEach((cell) => {
         cell.style.backgroundColor = color;
+        cell.style.backgroundImage = '';       
+        cell.dataset.isNotSprite = false;
     });
 }
 
@@ -361,7 +365,7 @@ function RgbToHex(rgb) {
     return `#${parseInt(r).toString(16).padStart(2, '0')}${parseInt(g).toString(16).padStart(2, '0')}${parseInt(b).toString(16).padStart(2, '0')}`;
 }
 
-function hexToRgb(hex) {
+function hexToRgb1(hex) {
     // Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
     const shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
     hex = hex.replace(shorthandRegex, (m, r, g, b) => r + r + g + g + b + b);
@@ -370,6 +374,12 @@ function hexToRgb(hex) {
     return result ? `rgb(${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(result[3], 16)})` : null;
 }
 
+function hexToRgb(hex) {
+    const r = parseInt(hex.substr(1, 2), 16);
+    const g = parseInt(hex.substr(3, 2), 16);
+    const b = parseInt(hex.substr(5, 2), 16);
+    return [r, g, b];
+}
 
 function createEmptyGrid() {
     const grid = [];
@@ -629,6 +639,69 @@ function cutRow(rowIndex) {
     setCutRowMode(0);
 }
 
+/**
+ * 
+ * Import a PNG
+ * 
+ * @param {*} PNGFile 
+ */
+function importPNG(PNGFile)
+{
+    const img = new Image();
+    img.onload = () => {
+        const canvas = document.createElement('canvas');
+        canvas.width = img.width;
+        canvas.height = img.height;
+        const context = canvas.getContext('2d');
+        context.drawImage(img, 0, 0);
+
+        // get the pixel data for the top-left 32x32 square
+        const imageData = context.getImageData(0, 0, 32, 32);
+
+        // loop through each pixel and set the corresponding cell in the grid to the nearest color
+        for (let i = 0; i < imageData.data.length; i += 4) {
+            const r = imageData.data[i];
+            const g = imageData.data[i + 1];
+            const b = imageData.data[i + 2];
+            const a = imageData.data[i + 3];
+            const nearestColor = findNearestColor(r, g, b); // replace with your own function to find nearest color
+            const index = Math.floor(i / 4);
+            const col = index % 32;
+            const row = Math.floor(index / 32);
+            const cell = document.querySelector(`#grid .cell:nth-child(${row * 32 + col + 1})`);
+            cell.style.backgroundColor = nearestColor;
+
+            if (a == 0)
+            {    
+                cell.style.backgroundImage = 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'10\' height=\'10\' viewBox=\'0 0 10 10\'%3E%3Cline x1=\'0\' y1=\'0\' x2=\'10\' y2=\'10\' stroke=\'red\' stroke-width=\'1\'/%3E%3C/svg%3E")';       
+                cell.dataset.isNotSprite = true;
+                cell.style.backgroundColor = "#FFFFFF";
+            }
+            else
+            {
+                cell.style.backgroundImage = '';       
+                cell.dataset.isNotSprite = false;
+            }
+        }
+    };
+    img.src = URL.createObjectURL(PNGFile);
+}
+
+function findNearestColor(r, g, b) {
+    let nearestColor = colors[0];
+    let minDistance = Infinity;
+    for (let i = 0; i < colors.length; i++) {
+        const color = colors[i];
+        const [r2, g2, b2] = hexToRgb(color);
+        const distance = Math.sqrt(Math.pow(r - r2, 2) + Math.pow(g - g2, 2) + Math.pow(b - b2, 2));
+        if (distance < minDistance) {
+            nearestColor = color;
+            minDistance = distance;
+        }
+    }
+    return nearestColor;
+}
+
 export {
     createGrid,
     setAllCellsToDefaultColor,
@@ -649,5 +722,6 @@ export {
     importSpriteData,
     importSpriteMaskData,
     setCutColumnMode,
-    setCutRowMode
+    setCutRowMode,
+    importPNG
 };

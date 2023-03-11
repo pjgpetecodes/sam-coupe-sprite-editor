@@ -17,7 +17,8 @@ import {    createGrid,
             importSpriteData,
             importSpriteMaskData,
             setCutColumnMode,
-            setCutRowMode } from './grid.js';
+            setCutRowMode,
+            importPNG } from './grid.js';
 
 import { colors, createColorGrid, setSelectedColor } from './colors.js'
 
@@ -144,6 +145,15 @@ cutColumnButton.addEventListener('click', () => {
 const cutRowButton = document.querySelector('#cutRow');
 cutRowButton.addEventListener('click', () => {
     setCutRowMode(1);
+});
+
+/**
+ * Import PNG Click Event
+ */
+const fileInput = document.querySelector('#importPNG');
+fileInput.addEventListener('change', (event) => {
+    const file = event.target.files[0];
+    importPNG(file);
 });
 
 /**
