@@ -154,6 +154,7 @@ const fileInput = document.querySelector('#importPNG');
 fileInput.addEventListener('change', (event) => {
     const file = event.target.files[0];
     importPNG(file);
+    event.target.value = '';
 });
 
 /**
