@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>SAM Coupé Sprite Editor</title>
-  <link rel="stylesheet" href="styles/style.css?v=1.0.1">
+  <link rel="stylesheet" href="styles/style.css">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 </head>
 <body>
@@ -56,8 +56,10 @@
             <button id="cutRow" class="half-width-button">Cut Row</button>
             <button id="convert" class="half-width-button">Generate Sprite Data</button>
             <button id="import" class="half-width-button">Import Sprite Data</button>
-            <input class="full-width-button" type="file" id="importPNG">
-        </div>
+
+            <label for="importPNG" class="btn full-width-button label-button">Import PNG</label>
+            <input class="full-width-button" style="display: none;" type="file" id="importPNG">
+      </div>
         <h5 class="center-header">Move Sprite</h3>
         <div id="pixelShift">
             <button id="moveUp" class="full-width-button">Up</button>
@@ -181,6 +183,7 @@ Sprite0_Mask_32:DEFB      0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 
   
   <script src="scripts/colors.js" type="module"></script>
   <script src="scripts/grid.js" type="module"></script>
+  <script src="scripts/bustCache.js" type="module"></script>
   <script src="scripts/main.js" type="module"></script>
 
   <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>

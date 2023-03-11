@@ -164,6 +164,13 @@ a.navbar-brand img {
 	width: 60%;
 }
 
+.label-button {
+    border: solid 2px black !important;
+    border-radius: 0px !important;
+    background-color: #f0f0f0;
+    height: 45px;
+}
+
 /*
 
 Media Styles

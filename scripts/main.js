@@ -21,6 +21,7 @@ import {    createGrid,
             importPNG } from './grid.js';
 
 import { colors, createColorGrid, setSelectedColor } from './colors.js'
+import { bustCaches } from './bustCache.js'
 
 const spriteOutputTextBox = document.querySelector('#sprite-output');
 const maskOutputTextBox = document.querySelector('#mask-output');
