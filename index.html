@@ -1,78 +1,85 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-  <meta charset="UTF-8">
-  <title>SAM Coupé Sprite Editor</title>
-  <link rel="stylesheet" href="styles/style.css">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	<meta charset="UTF-8">
+	<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+	<meta http-equiv="Pragma" content="no-cache">
+	<meta http-equiv="Expires" content="0">
+
+	<title>SAM Coupé Sprite Editor</title>
+	<link rel="stylesheet" href="styles/style.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+		integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 </head>
+
 <body>
 
-          <!-- Navigation -->
-<nav class="navbar navbar-expand-lg static-top">
-  <div class="container">
-      <div class="row">
-              <div class="col">
-                  <a class="navbar-brand" href="https://www.petecodes.co.uk">
-                      <img src="images/SAMCoupe.png" alt="">
-                  </a>
-              </div>
-              <div id="main-title" class="col-5 text-center">
-                  <h2>SAM Coupé Sprite Designer</h2>      
-              </div>
-              <div class="col text-right">
-                  <a class="right-logo " href="https://www.petecodes.co.uk">
-                      <img src="images/Sam_the_robot-2.png" alt="">
-                  </a>
-              </div>
-      </div>
-  </div>
-</nav>
+	<!-- Navigation -->
+	<nav class="navbar navbar-expand-lg static-top">
+		<div class="container">
+			<div class="row">
+				<div class="col">
+					<a class="navbar-brand" href="https://www.petecodes.co.uk">
+						<img src="images/SAMCoupe.png" alt="">
+					</a>
+				</div>
+				<div id="main-title" class="col-5 text-center">
+					<h2>SAM Coupé Sprite Designer</h2>
+				</div>
+				<div class="col text-right">
+					<a class="right-logo " href="https://www.petecodes.co.uk">
+						<img src="images/Sam_the_robot-2.png" alt="">
+					</a>
+				</div>
+			</div>
+		</div>
+	</nav>
 
-  <div id="main-container" class="container">
-    <div class="grid-container">
-      
-      <div id="color-grid">
-        <!-- Color Grid will be added here by JavaScript -->
-      </div>
-      <div id="grid">
-        <!-- Main Grid will be added here by JavaScript -->
-      </div>
-      <div id="toolbox">
+	<div id="main-container" class="container">
+		<div class="grid-container">
 
-        <h5 class="center-header">Select Sprite</h3>
-        <div id="navButtons">
-            <button id="prevButton" class="grid-nav-button">&lt;</button>
-            <div id="currentGrid">0</div>
-            <button id="nextButton" class="grid-nav-button">&gt;</button>
-        </div>
-        <h5 class="center-header">Controls</h3>
-        <div id="buttons">
-            <button id="clear" class="half-width-button">Clear Sprite Canvas</button>
-            <button id="clearToColour" class="half-width-button">Clear to Colour</button>
-            <button id="fill" class="half-width-button">Fill with Colour</button>
-            <button id="fillTransparency" class="half-width-button">Fill with Transparency</button>
-            <button id="cutColumn" class="half-width-button">Cut Column</button>
-            <button id="cutRow" class="half-width-button">Cut Row</button>
-            <button id="convert" class="half-width-button">Generate Sprite Data</button>
-            <button id="import" class="half-width-button">Import Sprite Data</button>
+			<div id="color-grid">
+				<!-- Color Grid will be added here by JavaScript -->
+			</div>
+			<div id="grid">
+				<!-- Main Grid will be added here by JavaScript -->
+			</div>
+			<div id="toolbox">
+				<h5 class="center-header">Select Sprite</h5>
+				<div id="navButtons">
+					<button id="prevButton" class="grid-nav-button">&lt;</button>
+					<div id="currentGrid">1</div>
+					<button id="nextButton" class="grid-nav-button">&gt;</button>
+				</div>
+				<h5 class="center-header">Controls</h5>
+				<div id="buttons">
+					<button id="clear" class="half-width-button">Clear Sprite Canvas</button>
+					<button id="clearToColour" class="half-width-button">Clear to Colour</button>
+					<button id="fill" class="half-width-button">Fill with Colour</button>
+					<button id="fillTransparency" class="half-width-button">Fill with Transparency</button>
+					<button id="cutColumn" class="half-width-button">Cut Column</button>
+					<button id="cutRow" class="half-width-button">Cut Row</button>
+					<button id="convert" class="half-width-button">Generate Sprite Data</button>
+					<button id="import" class="half-width-button">Import Sprite Data</button>
 
-            <label for="importPNG" class="btn full-width-button label-button">Import PNG</label>
-            <input class="full-width-button" style="display: none;" type="file" id="importPNG">
-      </div>
-        <h5 class="center-header">Move Sprite</h3>
-        <div id="pixelShift">
-            <button id="moveUp" class="full-width-button">Up</button>
-            <button id="moveLeft" class="half-width-button">Left</button>
-            <button id="moveRight" class="half-width-button">Right</button>
-            <button id="moveDown" class="full-width-button">Down</button>            
-        </div>
-      </div>
-    </div>
-    <h2>Sprite Data</h2>
-      
-    <div id="output-container">
-        <textarea type="text" contenteditable="true" id="sprite-output">Sprite1_1:    DEFB      0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF
+					<label for="importPNG" class="btn full-width-button label-button">Import PNG</label>
+					<input class="full-width-button" style="display: none;" type="file" id="importPNG">
+				</div>
+				<h5 class="center-header">Move Sprite</h5>
+				<div id="pixelShift">
+					<button id="moveUp" class="full-width-button">Up</button>
+					<button id="moveLeft" class="half-width-button">Left</button>
+					<button id="moveRight" class="half-width-button">Right</button>
+					<button id="moveDown" class="full-width-button">Down</button>
+				</div>
+			</div>
+		</div>
+
+		<h2 id="sprite-output-header">Sprite 1 Data</h2>
+		<div id="output-container">
+			<textarea type="text" contenteditable="true"
+				id="sprite-output">Sprite1_1:    DEFB      0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF
 Sprite1_2:    DEFB      0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF
 Sprite1_3:    DEFB      0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF
 Sprite1_4:    DEFB      0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF
@@ -104,12 +111,11 @@ Sprite1_29:   DEFB      0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x
 Sprite1_30:   DEFB      0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF
 Sprite1_31:   DEFB      0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF
 Sprite1_32:   DEFB      0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF</textarea>
-    </div>
+		</div>
 
-    <h2>Mask Data</h2>
-
-    <div id="mask-output-container">
-      <textarea type="text" contenteditable="true" id="mask-output">Sprite0_Mask_1:DEFB      0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF
+		<h2 id="mask-output-header">Mask 1 Data</h2>
+		<div id="mask-output-container">
+			<textarea type="text" contenteditable="true" id="mask-output">Sprite0_Mask_1:DEFB      0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF
 Sprite0_Mask_2:DEFB      0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF
 Sprite0_Mask_3:DEFB      0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF
 Sprite0_Mask_4:DEFB      0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF
@@ -142,54 +148,73 @@ Sprite0_Mask_30:DEFB      0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 
 Sprite0_Mask_31:DEFB      0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF
 Sprite0_Mask_32:DEFB      0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF
         </textarea>
-  </div>
-  
-  </div>
+		</div>
 
-</div>
+	</div>
 
-  <input type="color" id="color-picker" value="#000000" hidden>
+	</div>
 
-  <div class="container my-5">
-    <div class="row p-4 pb-0 pe-lg-0 pt-lg-5 align-items-center rounded-3 border shadow-lg">
-      <div class="col-lg-7 p-3 p-lg-5 pt-lg-3">
-        <h1 class="display-4 fw-bold lh-1">SAM Coupé Blogs</h1>
-        <p class="lead">You can find a few tutorials on Assembly Language and Graphics Programming for the SAM Coupé here;</p>
-        <a href="https://www.petecodes.co.uk/sam-coupe-assembly-language-programming/">SAM Coupé Assembly Language Programming</a>
-      <br>
-      <br>
-      <a href="https://www.petecodes.co.uk/graphics-in-assembler-for-the-sam-coupe/">Graphics in Assembler for the SAM Coupè</a>
-      </div>
-      <div class="col-lg-4 offset-lg-1 p-0 overflow-hidden shadow-lg">
-          <img class="rounded-lg-3 small-hero-image" src="images/Sam_the_robot.png" alt="" width="720">
-      </div>
-    </div>
-  </div>
+	<input type="color" id="color-picker" value="#000000" hidden>
 
-  <div class="container">
-    <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
-      <p class="col-md-4 mb-0 text-muted">© 2023 Pete Gallagher</p>
-  
-      <a href="/" class="col-md-4 d-flex align-items-center justify-content-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
-        <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
-      </a>
-  
-      <ul class="nav col-md-4 justify-content-end">
-        <li class="nav-item"><a href="https://www.petecodes.co.uk" class="nav-link px-2 text-muted">Home</a></li>
-        <li class="nav-item"><a href="https://www.petecodes.co.uk/blog" class="nav-link px-2 text-muted">Blog</a></li>
-      </ul>
-    </footer>
-  </div>
-  
-  <script src="scripts/colors.js" type="module"></script>
-  <script src="scripts/grid.js" type="module"></script>
-  <script src="scripts/bustCache.js" type="module"></script>
-  <script src="scripts/main.js" type="module"></script>
+	<div class="container my-5">
+		<div class="row p-4 pb-0 pe-lg-0 pt-lg-5 align-items-center rounded-3 border shadow-lg">
+			<div class="col-lg-7 p-3 p-lg-5 pt-lg-3">
+				<h1 class="display-4 fw-bold lh-1">SAM Coupé Blogs</h1>
+				<p class="lead">You can find a few tutorials on Assembly Language and Graphics Programming for the SAM
+					Coupé
+					here;</p>
+				<a href="https://www.petecodes.co.uk/sam-coupe-assembly-language-programming/">SAM Coupé Assembly
+					Language
+					Programming</a>
+				<br>
+				<br>
+				<a href="https://www.petecodes.co.uk/graphics-in-assembler-for-the-sam-coupe/">Graphics in Assembler for
+					the SAM
+					Coupè</a>
+			</div>
+			<div class="col-lg-4 offset-lg-1 p-0 overflow-hidden shadow-lg">
+				<img class="rounded-lg-3 small-hero-image" src="images/Sam_the_robot.png" alt="" width="720">
+			</div>
+		</div>
+	</div>
 
-  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-  <script src="https://code.jquery.com/jquery-3.1.1.js" integrity="sha256-16cdPddA6VdVInumRGo6IbivbERE8p7CQR3HzTBuELA=" crossorigin="anonymous"></script>
+	<div class="container">
+		<footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
+			<p class="col-md-4 mb-0 text-muted">© 2023 Pete Gallagher</p>
+
+			<a href="/"
+				class="col-md-4 d-flex align-items-center justify-content-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
+				<svg class="bi me-2" width="40" height="32">
+					<use xlink:href="#bootstrap"></use>
+				</svg>
+			</a>
+
+			<ul class="nav col-md-4 justify-content-end">
+				<li class="nav-item"><a href="https://www.petecodes.co.uk" class="nav-link px-2 text-muted">Home</a>
+				</li>
+				<li class="nav-item"><a href="https://www.petecodes.co.uk/blog"
+						class="nav-link px-2 text-muted">Blog</a></li>
+			</ul>
+		</footer>
+	</div>
+
+	<script src="scripts/colors.js" type="module"></script>
+	<script src="scripts/grid.js" type="module"></script>
+	<script src="scripts/bustCache.js" type="module"></script>
+	<script src="scripts/main.js" type="module"></script>
+
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+		integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+		crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+		integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+		crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+		integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+		crossorigin="anonymous"></script>
+	<script src="https://code.jquery.com/jquery-3.1.1.js"
+		integrity="sha256-16cdPddA6VdVInumRGo6IbivbERE8p7CQR3HzTBuELA=" crossorigin="anonymous"></script>
 
 </body>
+
 </html>

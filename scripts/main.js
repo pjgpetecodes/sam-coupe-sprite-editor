@@ -14,8 +14,10 @@ import {    createGrid,
             previousGrid, 
             generateSpriteData, 
             generateMaskData,
+            generateData,
             importSpriteData,
             importSpriteMaskData,
+            importData,
             setCutColumnMode,
             setCutRowMode,
             importPNG } from './grid.js';
@@ -25,7 +27,6 @@ import { bustCaches } from './bustCache.js'
 
 const spriteOutputTextBox = document.querySelector('#sprite-output');
 const maskOutputTextBox = document.querySelector('#mask-output');
-
 
 /**
  * Clear button click event
@@ -65,14 +66,7 @@ fillTransparencyButton.addEventListener('click', () => {
  */
 const generateSpriteDataButton = document.querySelector('#convert');
 generateSpriteDataButton.addEventListener('click', () => {    
-    var spriteOutput = generateSpriteData();
-    console.log(spriteOutput);
-    spriteOutputTextBox.value = spriteOutput;
-
-    var maskOutput = generateMaskData();
-    console.log(maskOutput);
-    maskOutputTextBox.value = maskOutput;
-
+    generateData(spriteOutputTextBox.value, maskOutputTextBox.value );
 });
 
 /**
@@ -80,8 +74,7 @@ generateSpriteDataButton.addEventListener('click', () => {
  */
 const importButton = document.querySelector('#import');
 importButton.addEventListener('click', () => {
-    importSpriteData(spriteOutputTextBox.value);
-    importSpriteMaskData(maskOutputTextBox.value);
+    importSpriteData(spriteOutputTextBox.value, maskOutputTextBox.value);
 });
 
 /**
@@ -90,6 +83,7 @@ importButton.addEventListener('click', () => {
 const nextButton = document.querySelector('#nextButton');
 nextButton.addEventListener('click', () => {
     nextGrid();
+    generateData();
 });
 
 /**
@@ -97,7 +91,8 @@ nextButton.addEventListener('click', () => {
  */
 const prevButton = document.querySelector('#prevButton');
 prevButton.addEventListener('click', () => {
-    previousGrid()
+    previousGrid();
+    generateData();
 });
 
 /**

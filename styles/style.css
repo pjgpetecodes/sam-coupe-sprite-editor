@@ -218,13 +218,13 @@ Media Styles
 @media (max-width: 1200px) {
 	#color-grid {
 		width: 40%;
-		grid-template-columns: repeat(4, 100px);
-		grid-template-rows: repeat(4, 100px);
+		grid-template-columns: repeat(4, 93px);
+		grid-template-rows: repeat(4, 93px);
 		min-width: 40%
 	}
 
 	#grid {
-		width: 74%;
+		width: 100%;
 	}
 
 	#toolbox {
@@ -234,5 +234,10 @@ Media Styles
 
 	.container {
 		max-width: 100%;
+	}
+
+	#sprite-output, #mask-output {
+		width: 100%;
+		font-size: 13px;
 	}
 }

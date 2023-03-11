@@ -9,6 +9,10 @@ const cutRowButton = document.querySelector('#cutRow');
 
 let currentGridIndex = 0;
 const currentGridDiv = document.querySelector('#currentGrid');
+const spriteOutputHeader = document.querySelector('#sprite-output-header');
+const spriteOutputTextBox = document.querySelector('#sprite-output');
+const maskOutputHeader = document.querySelector('#mask-output-header');
+const maskOutputTextBox = document.querySelector('#mask-output');
 
 var fillingMode = 0;
 var transparencyFillingMode = 0;
@@ -153,6 +157,12 @@ function setAllCellsPointer(pointer) {
     });
 }
 
+/**
+ * 
+ * Fill a whole area with a colour
+ * 
+ * @param {*} cell 
+ */
 function fillArea(cell) {
 
     var colorToFill = document.querySelector('#color-picker').value;
@@ -197,6 +207,12 @@ function fillArea(cell) {
 
 }
 
+/**
+ * 
+ * Fill a whole area with transparency (masking data)
+ * 
+ * @param {*} cell 
+ */
 function fillAreaWithTransparency(cell) {
 
     const cells = document.querySelectorAll('.cell');
@@ -238,6 +254,9 @@ function fillAreaWithTransparency(cell) {
 
 }
 
+/**
+ * Create the main Sprite Grid
+ */
 function createGrid() {
     const grid = document.querySelector('#grid');
     for (let i = 0; i < 1024; i++) {
@@ -340,6 +359,9 @@ function createEmptyGrids() {
     }
 }
 
+/**
+ * Set all cells to the default colour (Clear the canvas)
+ */
 function setAllCellsToDefaultColor() {
     const cells = document.querySelectorAll('.cell');
     cells.forEach((cell) => {
@@ -349,6 +371,9 @@ function setAllCellsToDefaultColor() {
     });
 }
 
+/**
+ * Clear all cells to the selected colour (Clear the canvas to a colour)
+ */
 function clearCellsToColour() {
     const selectedColorCell = document.querySelector('#color-grid .selected');
     const color = window.getComputedStyle(selectedColorCell).backgroundColor;
@@ -360,11 +385,25 @@ function clearCellsToColour() {
     });
 }
 
+/**
+ * 
+ * Convert an RGB CSS Colour to Hex
+ * 
+ * @param {*} rgb 
+ * @returns 
+ */
 function RgbToHex(rgb) {
     const [r, g, b] = rgb.substring(4, rgb.length - 1).split(", ");
     return `#${parseInt(r).toString(16).padStart(2, '0')}${parseInt(g).toString(16).padStart(2, '0')}${parseInt(b).toString(16).padStart(2, '0')}`;
 }
 
+/**
+ * 
+ * Convert a Hex CSS Colour to RGB
+ * 
+ * @param {*} hex 
+ * @returns 
+ */
 function hexToRgb1(hex) {
     // Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
     const shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
@@ -374,6 +413,13 @@ function hexToRgb1(hex) {
     return result ? `rgb(${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(result[3], 16)})` : null;
 }
 
+/**
+ * 
+ * Convert a Hex CSS Colour to RGB
+ * 
+ * @param {*} hex 
+ * @returns 
+ */
 function hexToRgb(hex) {
     const r = parseInt(hex.substr(1, 2), 16);
     const g = parseInt(hex.substr(3, 2), 16);
@@ -381,6 +427,12 @@ function hexToRgb(hex) {
     return [r, g, b];
 }
 
+/**
+ * 
+ * Create an Empty Grid Array
+ * 
+ * @returns 
+ */
 function createEmptyGrid() {
     const grid = [];
     const cells = document.querySelectorAll('.cell');
@@ -392,7 +444,9 @@ function createEmptyGrid() {
     return grid;
 }
 
-// save the current grid to the savedGrids array
+/**
+ *  * Save the Current Grid to the savedGrids Array
+ */
 function saveGrid() {
     const cells = document.querySelectorAll('.cell');
     const grid = [];
@@ -404,7 +458,9 @@ function saveGrid() {
     savedGrids[currentGridIndex] = grid;
 }
 
-// load the current grid from the savedGrids array
+/**
+ * Load the Current Grid from the savedGrids Array
+ */
 function loadGrid() {
     const grid = savedGrids[currentGridIndex];
     const cells = document.querySelectorAll('.cell');
@@ -423,7 +479,9 @@ function loadGrid() {
         }
     }
 
-    currentGridDiv.innerHTML = currentGridIndex;
+    currentGridDiv.innerHTML = currentGridIndex + 1;
+    spriteOutputHeader.innerHTML = `Sprite ${currentGridIndex + 1} Data`;
+    maskOutputHeader.innerHTML = `Mask ${currentGridIndex + 1} Data`;
 }
 
 /**
@@ -458,13 +516,19 @@ function generateSpriteData() {
     let output = '';
 
     for (let i = 0; i < hexArray.length; i++) {
-        const linePrefix = `Sprite${currentGridIndex}_${i + 1}:`.padEnd(14, ' ');
+        const linePrefix = `Sprite${currentGridIndex + 1}_${i + 1}:`.padEnd(14, ' ');
         output += linePrefix + 'DEFB      ' + hexArray[i].match(/.{1,4}/g).join(', ') + '\r\n';
     }
 
     return output;
 }
 
+/**
+ * 
+ * Generate the Sprite Mask Data
+ * 
+ * @returns 
+ */
 function generateMaskData() {
     const cells = document.querySelectorAll('.cell');
     let bytes = '';
@@ -494,11 +558,28 @@ function generateMaskData() {
     let output = '';
 
     for (let i = 0; i < hexArray.length; i++) {
-        const linePrefix = `Sprite${currentGridIndex}_Mask_${i + 1}:`.padEnd(14, ' ');
+        const linePrefix = `Sprite${currentGridIndex + 1}_Mask_${i + 1}:`.padEnd(14, ' ');
         output += linePrefix + 'DEFB      ' + hexArray[i].match(/.{1,4}/g).join(', ') + '\r\n';
     }
 
     return output;
+}
+
+/**
+ * 
+ * Generate Sprite Data
+ * 
+ * @param {*} spriteData 
+ * @param {*} maskData 
+ */
+function generateData() {
+    var spriteOutput = generateSpriteData();
+    console.log(spriteOutput);
+    spriteOutputTextBox.value = spriteOutput;
+
+    var maskOutput = generateMaskData();
+    console.log(maskOutput);
+    maskOutputTextBox.value = maskOutput;
 }
 
 /**
@@ -556,6 +637,18 @@ function importSpriteMaskData(maskTextData) {
         }
 
     });
+}
+
+/**
+ * 
+ * Import Sprite Data
+ * 
+ * @param {*} spriteData 
+ * @param {*} maskData 
+ */
+function importData(spriteData, maskData) {
+    importSpriteData(spriteData);
+    importSpriteMaskData(maskData);
 }
 
 /**
@@ -700,6 +793,15 @@ function importPNG(PNGFile)
     img.src = URL.createObjectURL(PNGFile);
 }
 
+/**
+ * 
+ * Find the nearest colour from the current pallete to the imported PNG pixel colour
+ * 
+ * @param {*} r 
+ * @param {*} g 
+ * @param {*} b 
+ * @returns 
+ */
 function findNearestColor(r, g, b) {
     let nearestColor = colors[0];
     let minDistance = Infinity;
@@ -732,8 +834,10 @@ export {
     previousGrid,
     generateSpriteData,
     generateMaskData,
+    generateData,
     importSpriteData,
     importSpriteMaskData,
+    importData,
     setCutColumnMode,
     setCutRowMode,
     importPNG
