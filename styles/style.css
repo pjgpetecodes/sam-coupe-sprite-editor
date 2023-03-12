@@ -28,16 +28,21 @@ h1 {
 	justify-content: center;
 }
 
-#color-grid {
-	display: grid;
-	grid-template-columns: repeat(4, 68px);
-	grid-template-rows: repeat(4, 68px);
-	gap: 1px;
+#color-grid-container {
 	border: 1px solid black;
 	margin-right: 20px;
 	margin-bottom: 20px;
 	justify-self: center;
 	min-width: 25%;
+}
+
+#color-grid {
+	display: grid;
+	margin-left: 6px;
+	grid-template-columns: repeat(4, 65px);
+	grid-template-rows: repeat(4, 65px);
+	justify-self: center;
+	gap: 1px;
 }
 
 #color-grid .color-cell {
@@ -171,6 +176,10 @@ a.navbar-brand img {
     height: 45px;
 }
 
+.output-format {
+	font-weight: bold;
+}
+
 /*
 
 Media Styles
@@ -183,13 +192,17 @@ Media Styles
 		flex-wrap: wrap;
 	}
 
-	#color-grid {
+	#color-grid-container {
 		order: 2;
-		width: 40%;
 		margin-top: 1rem;
+		width: 40%;
+		min-width: 40%
+	}
+
+	#color-grid {
 		grid-template-columns: repeat(4, 100px);
 		grid-template-rows: repeat(4, 100px);
-		min-width: 40%
+
 	}
 
 	#grid {

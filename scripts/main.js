@@ -28,6 +28,8 @@ import { bustCaches } from './bustCache.js'
 const spriteOutputTextBox = document.querySelector('#sprite-output');
 const maskOutputTextBox = document.querySelector('#mask-output');
 
+let useAmpersand = true; // set default value to true
+
 /**
  * Clear button click event
  */ 
@@ -66,7 +68,7 @@ fillTransparencyButton.addEventListener('click', () => {
  */
 const generateSpriteDataButton = document.querySelector('#convert');
 generateSpriteDataButton.addEventListener('click', () => {    
-    generateData(spriteOutputTextBox.value, maskOutputTextBox.value );
+    generateData(useAmpersand);
 });
 
 /**
@@ -74,7 +76,7 @@ generateSpriteDataButton.addEventListener('click', () => {
  */
 const importButton = document.querySelector('#import');
 importButton.addEventListener('click', () => {
-    importSpriteData(spriteOutputTextBox.value, maskOutputTextBox.value);
+    importData(spriteOutputTextBox.value, maskOutputTextBox.value);
 });
 
 /**
@@ -83,7 +85,7 @@ importButton.addEventListener('click', () => {
 const nextButton = document.querySelector('#nextButton');
 nextButton.addEventListener('click', () => {
     nextGrid();
-    generateData();
+    generateData(useAmpersand);
 });
 
 /**
@@ -92,7 +94,7 @@ nextButton.addEventListener('click', () => {
 const prevButton = document.querySelector('#prevButton');
 prevButton.addEventListener('click', () => {
     previousGrid();
-    generateData();
+    generateData(useAmpersand);
 });
 
 /**
@@ -151,6 +153,13 @@ fileInput.addEventListener('change', (event) => {
     const file = event.target.files[0];
     importPNG(file);
     event.target.value = '';
+});
+
+
+document.querySelectorAll('#hex-format input[type="radio"]').forEach((input) => {
+  input.addEventListener('change', () => {
+    useAmpersand = input.value === 'ampersand';
+  });
 });
 
 /**
