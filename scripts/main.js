@@ -30,6 +30,7 @@ const maskOutputTextBox = document.querySelector('#mask-output');
 
 let useAmpersand = true; // set default value to true
 
+
 /**
  * Clear button click event
  */ 
@@ -53,6 +54,7 @@ clearToColourButton.addEventListener('click', () => {
 const fillButton = document.querySelector('#fill');
 fillButton.addEventListener('click', () => {
     setFillingMode(1);
+    setFillingTransparencyMode(0);
 });
 
 /**
@@ -61,6 +63,7 @@ fillButton.addEventListener('click', () => {
 const fillTransparencyButton = document.querySelector('#fillTransparency');
 fillTransparencyButton.addEventListener('click', () => {
     setFillingTransparencyMode(1);
+    setFillingMode(0);
 });
 
 /**
@@ -74,7 +77,7 @@ generateSpriteDataButton.addEventListener('click', () => {
 /**
  * Import Sprite Data Click Event
  */
-const importButton = document.querySelector('#import');
+const importButton = document.querySelector('#import')
 importButton.addEventListener('click', () => {
     importData(spriteOutputTextBox.value, maskOutputTextBox.value);
 });

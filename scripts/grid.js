@@ -13,6 +13,8 @@ const spriteOutputHeader = document.querySelector('#sprite-output-header');
 const spriteOutputTextBox = document.querySelector('#sprite-output');
 const maskOutputHeader = document.querySelector('#mask-output-header');
 const maskOutputTextBox = document.querySelector('#mask-output');
+const interleavedOutputHeader = document.querySelector('#interleaved-output-header');
+const interleavedOutputTextBox = document.querySelector('#interleaved-output');
 
 var fillingMode = 0;
 var transparencyFillingMode = 0;
@@ -21,6 +23,13 @@ var cutRowMode = 0;
 var mouseIsDown = false;
 
 let ctrlHeld = false;
+let leaveBorder = true;
+
+document.querySelectorAll('#sprite-border input[type="radio"]').forEach((input) => {
+    input.addEventListener('change', () => {
+        leaveBorder = input.value === 'yes';
+    });
+});
 
 /**
  * Key Down Event
@@ -39,7 +48,6 @@ document.addEventListener("keyup", function (event) {
         ctrlHeld = false;
     }
 });
-
 
 /**
  * Move the Grid to the Right
@@ -132,6 +140,14 @@ function moveGridDown() {
  * @param {*} fillingModeValue 
  */
 function setFillingMode(fillingModeValue) {
+
+    if (fillingMode) {
+        fillButton.style.backgroundColor = "buttonface";
+        setAllCellsPointer("default");
+        fillingMode = 0;
+        return;
+    }
+
     fillingMode = fillingModeValue;
 
     if (fillingMode == 1) {
@@ -151,14 +167,22 @@ function setFillingMode(fillingModeValue) {
  * @param {*} TransparencyFillingModeValue 
  */
 function setFillingTransparencyMode(TransparencyFillingModeValue) {
+
+    if (transparencyFillingMode) {
+        transparencyFillButton.style.backgroundColor = "buttonface";
+        setAllCellsPointer("default");
+        transparencyFillingMode = 0;
+        return;
+    }
+
     transparencyFillingMode = TransparencyFillingModeValue;
 
-    if ((transparencyFillingMode == 1) && !ctrlHeld) {
+    if ((transparencyFillingMode == 1) && !leaveBorder) {
         transparencyFillButton.style.backgroundColor = "red";
         setAllCellsPointer("url('images/cursor.cur'), auto");
     }
-    else if ((transparencyFillingMode == 1) && ctrlHeld) {
-        transparencyFillButton.style.backgroundColor = "blue";
+    else if ((transparencyFillingMode == 1) && leaveBorder) {
+        transparencyFillButton.style.backgroundColor = "lightblue";
         setAllCellsPointer("url('images/cursor.cur'), auto");
     }
     else {
@@ -283,7 +307,7 @@ function fillAreaWithTransparency(cell, leaveBorder) {
 
     fillWithTransparency(row, col);
 
-    setFillingTransparencyMode(0);
+    setFillingTransparencyMode(0, false);
 
 }
 
@@ -358,7 +382,7 @@ function createGrid() {
                 fillArea(cell);
             }
             else if (transparencyFillingMode == 1) {
-                fillAreaWithTransparency(cell, ctrlHeld);
+                fillAreaWithTransparency(cell, leaveBorder);
             }
             else if (cutColumnMode == 1) {
                 cutColumn(col);
@@ -513,6 +537,7 @@ function loadGrid() {
     currentGridDiv.innerHTML = currentGridIndex + 1;
     spriteOutputHeader.innerHTML = `Sprite ${currentGridIndex + 1} Data`;
     maskOutputHeader.innerHTML = `Mask ${currentGridIndex + 1} Data`;
+    interleavedOutputHeader.innerHTML = `Interleave Data ${currentGridIndex + 1}`;
 }
 
 /**
@@ -627,7 +652,83 @@ function generateMaskData(useAmpersand) {
     let output = '';
 
     for (let i = 0; i < hexArray.length; i++) {
-        const linePrefix = `Sprite${currentGridIndex + 1}_Mask_${i + 1}:`.padEnd(14, ' ');
+        const linePrefix = `Sprite${currentGridIndex + 1}_M_${i + 1}:`.padEnd(14, ' ');
+        if (useAmpersand) {
+            output += linePrefix + 'DEFB      ' + hexArray[i].match(/.{1,3}/g).join(', ') + '\r\n';
+        }
+        else {
+            output += linePrefix + 'DEFB      ' + hexArray[i].match(/.{1,4}/g).join(', ') + '\r\n';
+        }
+    }
+
+    return output;
+}
+
+/**
+ * Generate interleaved sprite and mask data
+ * 
+ * @returns {string} Interleaved sprite and mask data
+ */
+function generateInterleavedData(useAmpersand) {
+    const cells = document.querySelectorAll('.cell');
+    let bytes = '';
+    for (let i = 0; i < cells.length; i += 2) {
+        const highSpriteNibble = colors.indexOf(RgbToHex(cells[i].style.backgroundColor)).toString(16).toUpperCase();
+        const lowSpriteNibble = colors.indexOf(RgbToHex(cells[i + 1].style.backgroundColor)).toString(16).toUpperCase();
+
+        var spriteByte;
+
+        if (useAmpersand) {
+            spriteByte = "&" + highSpriteNibble + lowSpriteNibble;
+        }
+        else {
+            spriteByte = "0x" + highSpriteNibble + lowSpriteNibble;
+        }
+
+        bytes += spriteByte;
+
+        var highMaskNibble;
+        if (cells[i].dataset.isNotSprite == 'true') {
+            highMaskNibble = 'F';
+        }
+        else {
+            highMaskNibble = '0'
+        }
+
+        var lowMaskNibble;
+        if (cells[i + 1].dataset.isNotSprite == 'true') {
+            lowMaskNibble = 'F';
+        }
+        else {
+            lowMaskNibble = '0'
+        }
+
+        var maskByte;
+
+        if (useAmpersand) {
+            maskByte = "&" + highMaskNibble + lowMaskNibble;
+        }
+        else {
+            maskByte = "0x" + highMaskNibble + lowMaskNibble;
+        }
+
+        bytes += maskByte;
+
+    }
+
+    var hexArray;
+
+    if (useAmpersand) {
+        hexArray = bytes.match(/.{1,96}/g);
+    }
+    else {
+        hexArray = bytes.match(/.{1,128}/g);
+    }
+
+    let output = '';
+
+    for (let i = 0; i < hexArray.length; i++) {
+        const linePrefix = `Sprite${currentGridIndex + 1}_${i + 1}:`.padEnd(14, ' ');
         if (useAmpersand) {
             output += linePrefix + 'DEFB      ' + hexArray[i].match(/.{1,3}/g).join(', ') + '\r\n';
         }
@@ -654,6 +755,10 @@ function generateData(useAmpersand) {
     var maskOutput = generateMaskData(useAmpersand);
     console.log(maskOutput);
     maskOutputTextBox.value = maskOutput;
+
+    var interleavedOutput = generateInterleavedData(useAmpersand);
+    console.log(interleavedOutput);
+    interleavedOutputTextBox.value = interleavedOutput;
 }
 
 /**
@@ -768,7 +873,7 @@ function importData(spriteData, maskData) {
  */
 function setCutColumnMode(cutColumnModeValue) {
 
-    if (cutColumnModeValue == 1) {
+    if (cutColumnModeValue == 1 && cutColumnMode == 0) {
         cutColumnButton.style.backgroundColor = "red";
         setAllCellsPointer("url('images/cutCursor.cur'), auto");
     }
@@ -817,7 +922,7 @@ function cutColumn(columnIndex) {
  */
 function setCutRowMode(cutRowModeValue) {
 
-    if (cutRowModeValue == 1) {
+    if (cutRowModeValue == 1 && cutRowMode == 0) {
         cutRowButton.style.backgroundColor = "red";
         setAllCellsPointer("url('images/cutCursor.cur'), auto");
     }

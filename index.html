@@ -50,15 +50,26 @@
 
 				<div id="options">
 
-					<p class="output-format">Output Format</p>
+					<p class="options-title-class">Output Format</p>
 					<div id="hex-format">
 						<label>
 							<input type="radio" name="hex" value="ampersand" checked> &amp;FF
 						</label>
 						<label>
 							<input type="radio" name="hex" value="zero"> 0xFF
-						</label>	
+						</label>
 					</div>
+
+					<p class="options-title-class">Leave Border when Filling Transparency</p>
+					<div id="sprite-border">
+						<label>
+							<input type="radio" name="spriteBorder" value="yes" checked> Yes
+						</label>
+						<label>
+							<input type="radio" name="spriteBorder" value="no"> No
+						</label>
+					</div>
+
 				</div>
 			</div>
 			<div id="grid">
@@ -97,8 +108,7 @@
 
 		<h2 id="sprite-output-header">Sprite 1 Data</h2>
 		<div id="output-container">
-			<textarea type="text" contenteditable="true"
-				id="sprite-output">Sprite1_1:    DEFB      &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF
+			<textarea type="text" contenteditable="true" id="sprite-output">Sprite1_1:    DEFB      &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF
 Sprite1_2:    DEFB      &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF
 Sprite1_3:    DEFB      &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF
 Sprite1_4:    DEFB      &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF
@@ -134,41 +144,75 @@ Sprite1_32:   DEFB      &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &
 
 		<h2 id="mask-output-header">Mask 1 Data</h2>
 		<div id="mask-output-container">
-			<textarea type="text" contenteditable="true" id="mask-output">Sprite1_Mask_1:		DEFB      &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF
-Sprite1_Mask_2:		DEFB      &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF
-Sprite1_Mask_3:		DEFB      &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF
-Sprite1_Mask_4:		DEFB      &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF
-Sprite1_Mask_5:		DEFB      &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF
-Sprite1_Mask_6:		DEFB      &FF, &FF, &FF, &FF, &FF, &FF, &F0, &00, &00, &FF, &FF, &FF, &FF, &FF, &FF, &FF
-Sprite1_Mask_7:		DEFB      &FF, &FF, &FF, &FF, &FF, &FF, &00, &00, &00, &0F, &FF, &FF, &FF, &FF, &FF, &FF
-Sprite1_Mask_8:		DEFB      &FF, &FF, &FF, &FF, &FF, &F0, &00, &00, &00, &00, &FF, &FF, &FF, &FF, &FF, &FF
-Sprite1_Mask_9:		DEFB      &FF, &FF, &FF, &FF, &FF, &00, &00, &00, &00, &00, &0F, &FF, &FF, &FF, &FF, &FF
-Sprite1_Mask_10:	DEFB      &FF, &FF, &FF, &FF, &FF, &00, &00, &00, &00, &00, &0F, &FF, &FF, &FF, &FF, &FF
-Sprite1_Mask_11:	DEFB      &FF, &FF, &FF, &FF, &F0, &00, &00, &00, &00, &00, &00, &FF, &FF, &FF, &FF, &FF
-Sprite1_Mask_12:	DEFB      &FF, &FF, &FF, &FF, &F0, &00, &00, &00, &00, &00, &00, &FF, &FF, &FF, &FF, &FF
-Sprite1_Mask_13:	DEFB      &FF, &FF, &FF, &FF, &F0, &00, &00, &00, &00, &00, &00, &FF, &FF, &FF, &FF, &FF
-Sprite1_Mask_14:	DEFB      &FF, &FF, &F0, &00, &00, &00, &00, &00, &00, &00, &00, &00, &00, &FF, &FF, &FF
-Sprite1_Mask_15:	DEFB      &FF, &FF, &00, &00, &00, &00, &00, &00, &00, &00, &00, &00, &00, &0F, &FF, &FF
-Sprite1_Mask_16:	DEFB      &FF, &FF, &00, &00, &00, &00, &00, &00, &00, &00, &00, &00, &00, &0F, &FF, &FF
-Sprite1_Mask_17:	DEFB      &FF, &FF, &00, &00, &00, &00, &00, &00, &00, &00, &00, &00, &00, &0F, &FF, &FF
-Sprite1_Mask_18:	DEFB      &FF, &FF, &00, &00, &00, &00, &00, &00, &00, &00, &00, &00, &00, &0F, &FF, &FF
-Sprite1_Mask_19:	DEFB      &FF, &FF, &F0, &00, &F0, &00, &00, &00, &00, &00, &00, &F0, &00, &FF, &FF, &FF
-Sprite1_Mask_20:	DEFB      &FF, &FF, &FF, &FF, &FF, &00, &00, &00, &00, &00, &0F, &FF, &FF, &FF, &FF, &FF
-Sprite1_Mask_21:	DEFB      &FF, &FF, &FF, &FF, &FF, &F0, &00, &00, &00, &00, &FF, &FF, &FF, &FF, &FF, &FF
-Sprite1_Mask_22:	DEFB      &FF, &FF, &FF, &FF, &FF, &F0, &00, &00, &00, &00, &FF, &FF, &FF, &FF, &FF, &FF
-Sprite1_Mask_23:	DEFB      &FF, &FF, &FF, &FF, &FF, &00, &00, &00, &00, &00, &0F, &FF, &FF, &FF, &FF, &FF
-Sprite1_Mask_24:	DEFB      &FF, &FF, &FF, &FF, &F0, &00, &00, &00, &00, &00, &00, &FF, &FF, &FF, &FF, &FF
-Sprite1_Mask_25:	DEFB      &FF, &FF, &FF, &FF, &F0, &00, &00, &00, &00, &00, &00, &FF, &FF, &FF, &FF, &FF
-Sprite1_Mask_26:	DEFB      &FF, &FF, &FF, &FF, &F0, &00, &00, &00, &00, &00, &00, &FF, &FF, &FF, &FF, &FF
-Sprite1_Mask_27:	DEFB      &FF, &FF, &FF, &FF, &F0, &00, &00, &0F, &00, &00, &00, &FF, &FF, &FF, &FF, &FF
-Sprite1_Mask_28:	DEFB      &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF
-Sprite1_Mask_29:	DEFB      &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF
-Sprite1_Mask_30:	DEFB      &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF
-Sprite1_Mask_31:	DEFB      &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF
-Sprite1_Mask_32:	DEFB      &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF</textarea>
+			<textarea type="text" contenteditable="true" id="mask-output">Sprite1_M_1:  DEFB      &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF
+Sprite1_M_2:  DEFB      &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF
+Sprite1_M_3:  DEFB      &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF
+Sprite1_M_4:  DEFB      &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF
+Sprite1_M_5:  DEFB      &FF, &FF, &FF, &FF, &FF, &FF, &F0, &00, &00, &FF, &FF, &FF, &FF, &FF, &FF, &FF
+Sprite1_M_6:  DEFB      &FF, &FF, &FF, &FF, &FF, &FF, &00, &00, &00, &0F, &FF, &FF, &FF, &FF, &FF, &FF
+Sprite1_M_7:  DEFB      &FF, &FF, &FF, &FF, &FF, &F0, &00, &00, &00, &00, &FF, &FF, &FF, &FF, &FF, &FF
+Sprite1_M_8:  DEFB      &FF, &FF, &FF, &FF, &FF, &00, &00, &00, &00, &00, &0F, &FF, &FF, &FF, &FF, &FF
+Sprite1_M_9:  DEFB      &FF, &FF, &FF, &FF, &F0, &00, &00, &00, &00, &00, &00, &FF, &FF, &FF, &FF, &FF
+Sprite1_M_10: DEFB      &FF, &FF, &FF, &FF, &F0, &00, &00, &00, &00, &00, &00, &FF, &FF, &FF, &FF, &FF
+Sprite1_M_11: DEFB      &FF, &FF, &FF, &FF, &00, &00, &00, &00, &00, &00, &00, &0F, &FF, &FF, &FF, &FF
+Sprite1_M_12: DEFB      &FF, &FF, &FF, &FF, &00, &00, &00, &00, &00, &00, &00, &0F, &FF, &FF, &FF, &FF
+Sprite1_M_13: DEFB      &FF, &FF, &F0, &00, &00, &00, &00, &00, &00, &00, &00, &00, &00, &FF, &FF, &FF
+Sprite1_M_14: DEFB      &FF, &FF, &00, &00, &00, &00, &00, &00, &00, &00, &00, &00, &00, &0F, &FF, &FF
+Sprite1_M_15: DEFB      &FF, &F0, &00, &00, &00, &00, &00, &00, &00, &00, &00, &00, &00, &00, &FF, &FF
+Sprite1_M_16: DEFB      &FF, &F0, &00, &00, &00, &00, &00, &00, &00, &00, &00, &00, &00, &00, &FF, &FF
+Sprite1_M_17: DEFB      &FF, &F0, &00, &00, &00, &00, &00, &00, &00, &00, &00, &00, &00, &00, &FF, &FF
+Sprite1_M_18: DEFB      &FF, &F0, &00, &00, &00, &00, &00, &00, &00, &00, &00, &00, &00, &00, &FF, &FF
+Sprite1_M_19: DEFB      &FF, &FF, &00, &00, &00, &00, &00, &00, &00, &00, &00, &00, &00, &0F, &FF, &FF
+Sprite1_M_20: DEFB      &FF, &FF, &F0, &00, &F0, &00, &00, &00, &00, &00, &00, &F0, &00, &FF, &FF, &FF
+Sprite1_M_21: DEFB      &FF, &FF, &FF, &FF, &FF, &00, &00, &00, &00, &00, &0F, &FF, &FF, &FF, &FF, &FF
+Sprite1_M_22: DEFB      &FF, &FF, &FF, &FF, &FF, &00, &00, &00, &00, &00, &0F, &FF, &FF, &FF, &FF, &FF
+Sprite1_M_23: DEFB      &FF, &FF, &FF, &FF, &F0, &00, &00, &00, &00, &00, &00, &FF, &FF, &FF, &FF, &FF
+Sprite1_M_24: DEFB      &FF, &FF, &FF, &FF, &00, &00, &00, &00, &00, &00, &00, &0F, &FF, &FF, &FF, &FF
+Sprite1_M_25: DEFB      &FF, &FF, &FF, &FF, &00, &00, &00, &00, &00, &00, &00, &0F, &FF, &FF, &FF, &FF
+Sprite1_M_26: DEFB      &FF, &FF, &FF, &FF, &00, &00, &00, &00, &00, &00, &00, &0F, &FF, &FF, &FF, &FF
+Sprite1_M_27: DEFB      &FF, &FF, &FF, &FF, &00, &00, &00, &00, &00, &00, &00, &0F, &FF, &FF, &FF, &FF
+Sprite1_M_28: DEFB      &FF, &FF, &FF, &FF, &F0, &00, &00, &0F, &00, &00, &00, &FF, &FF, &FF, &FF, &FF
+Sprite1_M_29: DEFB      &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF
+Sprite1_M_30: DEFB      &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF
+Sprite1_M_31: DEFB      &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF
+Sprite1_M_32: DEFB      &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF</textarea>
 		</div>
 
-	</div>
+		<h2 id="interleaved-output-header">Interleaved Data 1</h2>
+		<div id="interleaved-output-container">
+			<textarea type="text" contenteditable="false" id="interleaved-output">Sprite1_1:    DEFB      &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF
+Sprite1_2:    DEFB      &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF
+Sprite1_3:    DEFB      &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF
+Sprite1_4:    DEFB      &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF
+Sprite1_5:    DEFB      &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &F0, &FF, &00, &FF, &00, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF
+Sprite1_6:    DEFB      &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &F0, &00, &00, &00, &00, &00, &FF, &0F, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF
+Sprite1_7:    DEFB      &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &F0, &0F, &00, &FF, &00, &FF, &00, &0F, &00, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF
+Sprite1_8:    DEFB      &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &F0, &00, &FF, &00, &FF, &00, &FF, &00, &F0, &00, &FF, &0F, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF
+Sprite1_9:    DEFB      &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &F0, &0F, &00, &F0, &00, &0F, &00, &00, &00, &FF, &00, &0F, &00, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF
+Sprite1_10:   DEFB      &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &F0, &0F, &00, &0F, &00, &F0, &00, &FF, &00, &0F, &00, &0F, &00, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF
+Sprite1_11:   DEFB      &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &F0, &00, &F0, &00, &FF, &00, &F0, &00, &FF, &00, &F0, &00, &F0, &00, &FF, &0F, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF
+Sprite1_12:   DEFB      &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &F0, &00, &F0, &00, &F0, &00, &00, &00, &00, &00, &F0, &00, &F0, &00, &FF, &0F, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF
+Sprite1_13:   DEFB      &FF, &FF, &FF, &FF, &FF, &F0, &FF, &00, &F0, &00, &F0, &00, &F0, &00, &00, &00, &00, &00, &F0, &00, &F0, &00, &FF, &00, &FF, &00, &FF, &FF, &FF, &FF, &FF, &FF
+Sprite1_14:   DEFB      &FF, &FF, &FF, &FF, &F0, &00, &00, &00, &0F, &00, &FF, &00, &00, &00, &FF, &00, &F0, &00, &0F, &00, &FF, &00, &00, &00, &00, &00, &FF, &0F, &FF, &FF, &FF, &FF
+Sprite1_15:   DEFB      &FF, &FF, &FF, &F0, &0A, &00, &AA, &00, &0F, &00, &FF, &00, &FF, &00, &00, &00, &0F, &00, &FF, &00, &FF, &00, &0A, &00, &AA, &00, &0F, &00, &FF, &FF, &FF, &FF
+Sprite1_16:   DEFB      &FF, &FF, &FF, &F0, &0A, &00, &AA, &00, &0F, &00, &F0, &00, &FF, &00, &FF, &00, &FF, &00, &F0, &00, &FF, &00, &0A, &00, &AA, &00, &0F, &00, &FF, &FF, &FF, &FF
+Sprite1_17:   DEFB      &FF, &FF, &FF, &F0, &0A, &00, &AA, &00, &0F, &00, &FF, &00, &00, &00, &00, &00, &00, &00, &0F, &00, &FF, &00, &0A, &00, &AA, &00, &0F, &00, &FF, &FF, &FF, &FF
+Sprite1_18:   DEFB      &FF, &FF, &FF, &F0, &0A, &00, &AA, &00, &0F, &00, &FF, &00, &F0, &00, &00, &00, &00, &00, &FF, &00, &FF, &00, &0A, &00, &AA, &00, &0F, &00, &FF, &FF, &FF, &FF
+Sprite1_19:   DEFB      &FF, &FF, &FF, &FF, &F0, &00, &00, &00, &F0, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &F0, &00, &F0, &00, &00, &00, &FF, &0F, &FF, &FF, &FF, &FF
+Sprite1_20:   DEFB      &FF, &FF, &FF, &FF, &FF, &F0, &FF, &00, &FF, &F0, &0F, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &0F, &00, &FF, &F0, &FF, &00, &FF, &FF, &FF, &FF, &FF, &FF
+Sprite1_21:   DEFB      &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &F0, &00, &0F, &00, &FF, &00, &FF, &00, &00, &00, &FF, &0F, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF
+Sprite1_22:   DEFB      &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &F0, &00, &00, &00, &00, &00, &00, &00, &00, &00, &FF, &0F, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF
+Sprite1_23:   DEFB      &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &F0, &0A, &00, &AA, &00, &AF, &00, &AA, &00, &AA, &00, &0F, &00, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF
+Sprite1_24:   DEFB      &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &F0, &00, &AA, &00, &AF, &00, &A0, &00, &AF, &00, &AA, &00, &A0, &00, &FF, &0F, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF
+Sprite1_25:   DEFB      &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &F0, &00, &AA, &00, &AA, &00, &A0, &00, &AA, &00, &AA, &00, &A0, &00, &FF, &0F, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF
+Sprite1_26:   DEFB      &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &F0, &00, &AA, &00, &AA, &00, &A0, &00, &AA, &00, &AA, &00, &A0, &00, &FF, &0F, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF
+Sprite1_27:   DEFB      &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &F0, &00, &00, &00, &00, &00, &0F, &00, &00, &00, &00, &00, &00, &00, &FF, &0F, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF
+Sprite1_28:   DEFB      &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &F0, &FF, &00, &FF, &00, &FF, &0F, &FF, &00, &FF, &00, &FF, &00, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF
+Sprite1_29:   DEFB      &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF
+Sprite1_30:   DEFB      &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF
+Sprite1_31:   DEFB      &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF
+Sprite1_32:   DEFB      &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF</textarea>
+		</div>
 
 	</div>
 
