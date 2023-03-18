@@ -68,6 +68,8 @@ JREADKEY:       EQU     361             ; The Keyboard Read Routine...
 ; ... Which of course will store their return location on the Stack Pointer...
 ; ... This would've overwritten some of the Screen Page if left unreseolved...
 ;
+; Note: Uncomment this line if you want to press a key to step through the Sprite being Drawn
+;
 ;                CALL    Wait_For_Key    ; Wait for a keypress
 ;
 ; Print a sprite in the top left corner
@@ -91,7 +93,7 @@ Print_Loop1:	BIT     0,C             ; Check if this is an odd or even line...
 ;               
 Print_Loop2:    
 ;
-; Note: You can uncomment this line if you want to step through the Sprite being drawn!
+; Note: Uncomment this line if you want to press a key to step through the Sprite being Drawn
 ;
 ;                CALL    Wait_For_Key    ;               
 ;
@@ -113,6 +115,8 @@ Print_Loop3:    LD      A,C             ; Move C Register to A ready for Subtrac
                 LD      C,A             ; Move A Register back to C Register (Line Counter)
                 JR 		NZ,Print_loop   ; Repeat if we're not on the last line
 ;
+; Note: Uncomment this line if you want to press a key to step through the Sprite being Drawn
+;
 ;                CALL    Wait_For_Key    ;               
 ;
 ; We must remember to switch BASIC back into Page 0
@@ -128,7 +132,7 @@ System_SP:		LD      SP,0            ; Place holder for the System Stack Location
 ;
 ; Return back to BASIC
 ;
-                RET                     ;
+                RET                     ; Return Back to Basic
 ;
 ;
 ;
@@ -139,6 +143,8 @@ Odd_Line:       SET     7,L             ; Set the top bit of the L Register to p
 Even_Line:      RES     7,L             ; Clear the top bit of the L Resister to point to the Even Screen Line
 ;
 ; Mask the Sprite
+;
+; Note: This isn't a subroutine as we want to jump back to the main code afterwards.
 ;
 Mask_Sprite:	LD 		A,(DE)			; Get the Mask Byte
 				AND 	(HL)			; AND with the Byte at the current Screen Location 
@@ -159,7 +165,7 @@ Clear_Screen:   XOR     A               ; Clear the A register, so when passed i
                                         ; ...it clears the whole screen
                 CALL    JCLSBL          ; Clear the Screen
                 DI                      ; Disable Interupts
-                RET                     ;
+                RET                     ; Return from the Sub Routine
 ;
 ; ***********************************************************************************
 ; *                                                                                 *
