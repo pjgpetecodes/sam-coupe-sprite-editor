@@ -9,9 +9,9 @@
 ; |                                                                                 |
 ; -----------------------------------------------------------------------------------
 ;
-		ORG 	0x8000			; Store the program in User Address Space
-                DUMP	1,0     ;
-                autoexec		; Automatically Execute the Program
+		ORG 	0x8000					; Store the program in User Address Space
+                DUMP	1,0     		;
+                autoexec				; Automatically Execute the Program
 ;
 ; ***********************************************************************************
 ; *                                                                                 *
@@ -66,7 +66,7 @@ JREADKEY:       EQU     361             ; The Keyboard Read Routine...
 ;
 ; All of the above shifting around of the Stack Pointer, allows us to Call routines...
 ; ... Which of course will store their return location on the Stack Pointer...
-; ... This would've overwritten some of the Screen Page if left unreseolved...
+; ... This would've overwritten some of the Screen Page if left unresolved...
 ;
 ; Note: Uncomment this line if you want to press a key to step through the Sprite being Drawn
 ;
@@ -78,12 +78,12 @@ JREADKEY:       EQU     361             ; The Keyboard Read Routine...
 ;
 ; Print a Sprite
 ;
-print_sprite:	LD 		DE,Sprite1_1    ; Set the pointer to start of our Interleaved Sprite Data
+print_sprite:	LD 		DE,Sprite1_1    ; Set the pointer to the start of our Interleaved Sprite Data
                 LD      C,32            ; Setup Line counter, 32 lines per sprite to print
 ;
 ; This is the start of our Sprite Printing Loop
 ;
-Print_Loop:		LD 		B,16			; Set up loop counter, 16 bytes per line of a sprite to print
+Print_Loop:		LD 		B,16			; Set up loop counter, 16 bytes per line of a sprite to print (The code will take care of the Mask + Sprite)
 ;
 Print_Loop1:	BIT     0,C             ; Check if this is an odd or even line...
                 JR 		NZ,Odd_Line		; ... If this is an odd line (Bit 0 is a 1), then print an odd line...
@@ -134,7 +134,8 @@ System_SP:		LD      SP,0            ; Place holder for the System Stack Location
 ;
                 RET                     ; Return Back to Basic
 ;
-;
+; This section sets which line of the screen we're wriing to (A 1 in the upmost bit is an odd line.)
+; It then prints the Sprite Out including it's mask bytes
 ;
 Odd_Line:       SET     7,L             ; Set the top bit of the L Register to point to the Odd Screen Line
 				JP		Mask_Sprite		; Jump to the Mask Sprite routine
@@ -193,7 +194,7 @@ Scr_Page:		LD      A,0          	; Place holder for the Screen Page...
                 POP     HL              ; Retrieve the HL Registers
                 POP     DE              ; Retrieve the DE Registers
                 POP     BC              ; Retrieve the BC Registers
-                RET                     ;
+                RET                     ;                    ;
 ;
 ; ***********************************************************************************
 ; *                                                                                 *

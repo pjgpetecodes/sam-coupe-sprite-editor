@@ -134,7 +134,8 @@ System_SP:		LD      SP,0            ; Place holder for the System Stack Location
 ;
                 RET                     ; Return Back to Basic
 ;
-;
+; This section sets which line of the screen we're wriing to (A 1 in the upmost bit is an odd line.)
+; It then prints the Sprite Out including it's mask bytes
 ;
 Odd_Line:       SET     7,L             ; Set the top bit of the L Register to point to the Odd Screen Line
 				JP		Mask_Sprite		; Jump to the Mask Sprite routine
