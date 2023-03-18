@@ -40,7 +40,7 @@ JREADKEY:       EQU     361             ; The Keyboard Read Routine...
 ; we need to make sure we save the current Stack Pointer location, and create our own location.
 ; We rewrite our program here effectively, by storing it's original location in a holding position.
 ;
-                LD		(System_SP+1),SP; Get the Current Stack Pointer Location and Overwrite...
+                LD	(System_SP+1),SP; Get the Current Stack Pointer Location and Overwrite...
                                         ; ... the holding value below.
 ;
 ; Get the Current Screen Page and set the LMPR register up so we can write to the screen
@@ -68,46 +68,52 @@ JREADKEY:       EQU     361             ; The Keyboard Read Routine...
 ; ... Which of course will store their return location on the Stack Pointer...
 ; ... This would've overwritten some of the Screen Page if left unreseolved...
 ;
-;                CALL    Wait_For_Key   ; Wait for a keypress
+;                CALL    Wait_For_Key    ; Wait for a keypress
 ;
 ; Print a sprite in the top left corner
 ;
-                LD      DE,0x0000       ; Point to the Top Left corner of our screen
+                LD      HL,0x0000       ; Point to the Top Left corner of our screen
 ;
 ; Print a Sprite
 ;
-print_sprite:	LD 		HL,Sprite1_1    ; Set pointer to start of our Sprite 
-                LD 		BC,512			; Set up loop counter, 16 bytes per Row of a sprite to print
-;
-				JP		Print_Loop1		; We must skip the first increment here so that we start at 0
+print_sprite:	LD 		DE,Sprite1_1    ; Set pointer to start of our Sprite 
+                LD      C,32            ; Setup Line counter, 32 lines per sprite to print
 ;
 ; This is the start of our Sprite Printing Loop
 ;
-Print_Loop:		LD      A,E             ;
-                ADD     112             ;
-                LD      E,A             ;
-                INC     D               ; Set for the Next Row taking account of our x position
+Print_Loop:		LD 		B,16			; Set up loop counter, 16 bytes per line of a sprite to print
 ;
-; Print the Even Row of the Sprite
+Print_Loop1:	BIT     0,C             ; Check if this is an odd or even line...
+                JR 		NZ,Odd_Line		; ... If this is an odd line (Bit 0 is a 1), then print an odd line...
+                JP      Even_Line       ; ... Otherwise, print an even line
 ;
-Print_Loop1:    FOR     16, LDI			; This is a PYZ80 directive which inserts 16 LDI instructions
+; We've printed a pixel... Wait for a keypress then set for the next pixel in our Sprite...
+;               
+Print_Loop2:    
 ;
-                LD      A,E             ;
-                ADD     112             ;
-                LD      E,A             ; Set for the Next Row taking account of our x position
+; Note: You can uncomment this line if you want to step through the Sprite being drawn!
 ;
-; Print the Odd Row of the Sprite
+;                CALL    Wait_For_Key    ;               
 ;
-                FOR     16, LDI			; This is a PYZ80 directive which inserts 16 LDI instructions
+                INC     DE              ; Move to next Sprite Byte
+                INC 	HL				; Move to the next Screen Position
+				
+                DJNZ 	Print_Loop1		; If we've not yet reach the last Sprite Byte, then loop                
 ;
-; LDI Moves the Value at the location pointed to by (HL)...
-; ... into the location pointed to by (DE)...
-; ... It then Decrements BC, setting P/V (Parity / Overflow) flag if the BC has reached zero
+                LD      L,0             ; Point to the Left of our screen
+                BIT     0,C             ; Check if this is an odd or even line...
+                JR 		Z,Print_Loop3   ; ... If this is an even line (Bit 0 is a 0), Dont' increment yet...
+                INC     H               ; ... Otherwise, set for the next line
 ;
-                JP      PE, Print_Loop  ; Loop until BC = zero (i.e. P/V set)
+; Increment the Line Counter
 ;
-                CALL    Wait_For_Key    ;
+Print_Loop3:    LD      A,C             ; Move C Register to A ready for Subtraction
+                LD      C,1             ; C= 1
+                SUB     C               ; Set for Next Sprite Line - Decrement C by 1 - Subtract C (1) from A 
+                LD      C,A             ; Move A Register back to C Register (Line Counter)
+                JR 		NZ,Print_loop   ; Repeat if we're not on the last line
 ;
+;                CALL    Wait_For_Key    ;               
 ;
 ; We must remember to switch BASIC back into Page 0
 ;
@@ -116,13 +122,32 @@ Print_Loop1:    FOR     16, LDI			; This is a PYZ80 directive which inserts 16 L
 ;
 ; Return the System Stack Pointer to it's original location in Bank B somewhere...
 ;
-System_SP:		LD   	SP,0            ; Place holder for the System Stack Location...
+System_SP:		LD      SP,0            ; Place holder for the System Stack Location...
                                         ; This will be overwritten above once we know it's location
                 EI                      ; Enable Interupts
 ;
 ; Return back to BASIC
 ;
                 RET                     ;
+;
+;
+;
+Odd_Line:       SET     7,L             ; Set the top bit of the L Register to point to the Odd Screen Line
+				JP		Mask_Sprite		; Jump to the Mask Sprite routine
+;
+;
+Even_Line:      RES     7,L             ; Clear the top bit of the L Resister to point to the Even Screen Line
+;
+; Mask the Sprite
+;
+Mask_Sprite:	LD 		A,(DE)			; Get the Mask Byte
+				AND 	(HL)			; AND with the Byte at the current Screen Location 
+				INC 	DE				; Point to the Sprite Byte
+				LD 		A,(DE)			; Get the Mask Byte
+				OR 		(HL)			; OR with the Byte at the current Screen Location
+				LD 		(HL), A			; Write the result to the Screen
+;
+                JP      Print_Loop2     ;
 ;
 ; ***********************************************************************************
 ; *                                                                                 *
@@ -156,7 +181,7 @@ No_Key_Loop:    CALL	JREADKEY		; Read the Keyboard (Zero if no key)
 ;
                 DI                      ; Disable Interuprts
 ;				
-Scr_Page:		LD      A,0	        	; Place holder for the Screen Page...
+Scr_Page:		LD      A,0          	; Place holder for the Screen Page...
                                         ; ...The 0 will be overwritten above once we know where it is...
                 OUT		(LMPR),A        ; Page the Screen into the relevant Page 
                 POP     HL              ; Retrieve the HL Registers
@@ -170,36 +195,36 @@ Scr_Page:		LD      A,0	        	; Place holder for the Screen Page...
 ; *                                                                                 *
 ; ***********************************************************************************
 ;
+Sprite1_1:    DEFB      &F0, &0A, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00
+Sprite1_2:    DEFB      &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00
+Sprite1_3:    DEFB      &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00
+Sprite1_4:    DEFB      &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00
+Sprite1_5:    DEFB      &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &F0, &0F, &00, &FF, &00, &FF, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00
+Sprite1_6:    DEFB      &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &00, &F0, &00, &00, &00, &00, &0F, &F0, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00
+Sprite1_7:    DEFB      &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &F0, &0F, &00, &0F, &00, &FF, &00, &FF, &00, &0F, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00
+Sprite1_8:    DEFB      &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &00, &F0, &00, &FF, &00, &FF, &00, &FF, &00, &F0, &0F, &F0, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00
+Sprite1_9:    DEFB      &FF, &00, &FF, &00, &FF, &00, &FF, &00, &F0, &0F, &00, &0F, &00, &F0, &00, &0F, &00, &00, &00, &FF, &00, &0F, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00
+Sprite1_10:   DEFB      &FF, &00, &FF, &00, &FF, &00, &FF, &00, &F0, &0F, &00, &0F, &00, &0F, &00, &F0, &00, &FF, &00, &0F, &00, &0F, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00
+Sprite1_11:   DEFB      &FF, &00, &FF, &00, &FF, &00, &FF, &00, &00, &F0, &00, &F0, &00, &FF, &00, &F0, &00, &FF, &00, &F0, &00, &F0, &0F, &F0, &FF, &00, &FF, &00, &FF, &00, &FF, &00
+Sprite1_12:   DEFB      &FF, &00, &FF, &00, &FF, &00, &FF, &00, &00, &F0, &00, &F0, &00, &F0, &00, &00, &00, &00, &00, &F0, &00, &F0, &0F, &F0, &FF, &00, &FF, &00, &FF, &00, &FF, &00
+Sprite1_13:   DEFB      &FF, &00, &FF, &00, &F0, &0F, &00, &FF, &00, &F0, &00, &F0, &00, &F0, &00, &00, &00, &00, &00, &F0, &00, &F0, &00, &FF, &00, &FF, &FF, &00, &FF, &00, &FF, &00
+Sprite1_14:   DEFB      &FF, &00, &FF, &00, &00, &F0, &00, &00, &00, &0F, &00, &FF, &00, &00, &00, &FF, &00, &F0, &00, &0F, &00, &FF, &00, &00, &00, &00, &0F, &F0, &FF, &00, &FF, &00
+Sprite1_15:   DEFB      &FF, &00, &F0, &0F, &00, &0A, &00, &AA, &00, &0F, &00, &FF, &00, &FF, &00, &00, &00, &0F, &00, &FF, &00, &FF, &00, &0A, &00, &AA, &00, &0F, &FF, &00, &FF, &00
+Sprite1_16:   DEFB      &FF, &00, &F0, &0F, &00, &0A, &00, &AA, &00, &0F, &00, &F0, &00, &FF, &00, &FF, &00, &FF, &00, &F0, &00, &FF, &00, &0A, &00, &AA, &00, &0F, &FF, &00, &FF, &00
+Sprite1_17:   DEFB      &FF, &00, &F0, &0F, &00, &0A, &00, &AA, &00, &0F, &00, &FF, &00, &00, &00, &00, &00, &00, &00, &0F, &00, &FF, &00, &0A, &00, &AA, &00, &0F, &FF, &00, &FF, &00
+Sprite1_18:   DEFB      &FF, &00, &F0, &0F, &00, &0A, &00, &AA, &00, &0F, &00, &FF, &00, &F0, &00, &00, &00, &00, &00, &FF, &00, &FF, &00, &0A, &00, &AA, &00, &0F, &FF, &00, &FF, &00
+Sprite1_19:   DEFB      &FF, &00, &FF, &00, &00, &F0, &00, &00, &00, &F0, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &F0, &00, &F0, &00, &00, &0F, &F0, &FF, &00, &FF, &00
+Sprite1_20:   DEFB      &FF, &00, &FF, &00, &F0, &0F, &00, &FF, &F0, &0F, &00, &0F, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &0F, &F0, &0F, &00, &FF, &FF, &00, &FF, &00, &FF, &00
+Sprite1_21:   DEFB      &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &00, &F0, &00, &0F, &00, &FF, &00, &FF, &00, &00, &0F, &F0, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00
+Sprite1_22:   DEFB      &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &00, &F0, &00, &00, &00, &00, &00, &00, &00, &00, &0F, &F0, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00
+Sprite1_23:   DEFB      &FF, &00, &FF, &00, &FF, &00, &FF, &00, &F0, &0F, &00, &0A, &00, &AA, &00, &AF, &00, &AA, &00, &AA, &00, &0F, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00
+Sprite1_24:   DEFB      &FF, &00, &FF, &00, &FF, &00, &FF, &00, &00, &F0, &00, &AA, &00, &AF, &00, &A0, &00, &AF, &00, &AA, &00, &A0, &0F, &F0, &FF, &00, &FF, &00, &FF, &00, &FF, &00
+Sprite1_25:   DEFB      &FF, &00, &FF, &00, &FF, &00, &FF, &00, &00, &F0, &00, &AA, &00, &AA, &00, &A0, &00, &AA, &00, &AA, &00, &A0, &0F, &F0, &FF, &00, &FF, &00, &FF, &00, &FF, &00
+Sprite1_26:   DEFB      &FF, &00, &FF, &00, &FF, &00, &FF, &00, &00, &F0, &00, &AA, &00, &AA, &00, &A0, &00, &AA, &00, &AA, &00, &A0, &0F, &F0, &FF, &00, &FF, &00, &FF, &00, &FF, &00
+Sprite1_27:   DEFB      &FF, &00, &FF, &00, &FF, &00, &FF, &00, &00, &F0, &00, &00, &00, &00, &00, &0F, &00, &00, &00, &00, &00, &00, &0F, &F0, &FF, &00, &FF, &00, &FF, &00, &FF, &00
+Sprite1_28:   DEFB      &FF, &00, &FF, &00, &FF, &00, &FF, &00, &F0, &0F, &00, &FF, &00, &FF, &0F, &F0, &00, &FF, &00, &FF, &00, &FF, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00
+Sprite1_29:   DEFB      &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00
+Sprite1_30:   DEFB      &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00
+Sprite1_31:   DEFB      &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00
+Sprite1_32:   DEFB      &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00
 
-Sprite1_1:    DEFB      &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF
-Sprite1_2:    DEFB      &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF
-Sprite1_3:    DEFB      &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF
-Sprite1_4:    DEFB      &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF
-Sprite1_5:    DEFB      &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &F0, &FF, &00, &FF, &00, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF
-Sprite1_6:    DEFB      &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &F0, &00, &00, &00, &00, &00, &FF, &0F, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF
-Sprite1_7:    DEFB      &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &F0, &0F, &00, &FF, &00, &FF, &00, &0F, &00, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF
-Sprite1_8:    DEFB      &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &F0, &00, &FF, &00, &FF, &00, &FF, &00, &F0, &00, &FF, &0F, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF
-Sprite1_9:    DEFB      &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &F0, &0F, &00, &F0, &00, &0F, &00, &00, &00, &FF, &00, &0F, &00, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF
-Sprite1_10:   DEFB      &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &F0, &0F, &00, &0F, &00, &F0, &00, &FF, &00, &0F, &00, &0F, &00, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF
-Sprite1_11:   DEFB      &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &F0, &00, &F0, &00, &FF, &00, &F0, &00, &FF, &00, &F0, &00, &F0, &00, &FF, &0F, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF
-Sprite1_12:   DEFB      &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &F0, &00, &F0, &00, &F0, &00, &00, &00, &00, &00, &F0, &00, &F0, &00, &FF, &0F, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF
-Sprite1_13:   DEFB      &FF, &FF, &FF, &FF, &FF, &F0, &FF, &00, &F0, &00, &F0, &00, &F0, &00, &00, &00, &00, &00, &F0, &00, &F0, &00, &FF, &00, &FF, &00, &FF, &FF, &FF, &FF, &FF, &FF
-Sprite1_14:   DEFB      &FF, &FF, &FF, &FF, &F0, &00, &00, &00, &0F, &00, &FF, &00, &00, &00, &FF, &00, &F0, &00, &0F, &00, &FF, &00, &00, &00, &00, &00, &FF, &0F, &FF, &FF, &FF, &FF
-Sprite1_15:   DEFB      &FF, &FF, &FF, &F0, &0A, &00, &AA, &00, &0F, &00, &FF, &00, &FF, &00, &00, &00, &0F, &00, &FF, &00, &FF, &00, &0A, &00, &AA, &00, &0F, &00, &FF, &FF, &FF, &FF
-Sprite1_16:   DEFB      &FF, &FF, &FF, &F0, &0A, &00, &AA, &00, &0F, &00, &F0, &00, &FF, &00, &FF, &00, &FF, &00, &F0, &00, &FF, &00, &0A, &00, &AA, &00, &0F, &00, &FF, &FF, &FF, &FF
-Sprite1_17:   DEFB      &FF, &FF, &FF, &F0, &0A, &00, &AA, &00, &0F, &00, &FF, &00, &00, &00, &00, &00, &00, &00, &0F, &00, &FF, &00, &0A, &00, &AA, &00, &0F, &00, &FF, &FF, &FF, &FF
-Sprite1_18:   DEFB      &FF, &FF, &FF, &F0, &0A, &00, &AA, &00, &0F, &00, &FF, &00, &F0, &00, &00, &00, &00, &00, &FF, &00, &FF, &00, &0A, &00, &AA, &00, &0F, &00, &FF, &FF, &FF, &FF
-Sprite1_19:   DEFB      &FF, &FF, &FF, &FF, &F0, &00, &00, &00, &F0, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &F0, &00, &F0, &00, &00, &00, &FF, &0F, &FF, &FF, &FF, &FF
-Sprite1_20:   DEFB      &FF, &FF, &FF, &FF, &FF, &F0, &FF, &00, &FF, &F0, &0F, &00, &FF, &00, &FF, &00, &FF, &00, &FF, &00, &0F, &00, &FF, &F0, &FF, &00, &FF, &FF, &FF, &FF, &FF, &FF
-Sprite1_21:   DEFB      &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &F0, &00, &0F, &00, &FF, &00, &FF, &00, &00, &00, &FF, &0F, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF
-Sprite1_22:   DEFB      &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &F0, &00, &00, &00, &00, &00, &00, &00, &00, &00, &FF, &0F, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF
-Sprite1_23:   DEFB      &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &F0, &0A, &00, &AA, &00, &AF, &00, &AA, &00, &AA, &00, &0F, &00, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF
-Sprite1_24:   DEFB      &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &F0, &00, &AA, &00, &AF, &00, &A0, &00, &AF, &00, &AA, &00, &A0, &00, &FF, &0F, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF
-Sprite1_25:   DEFB      &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &F0, &00, &AA, &00, &AA, &00, &A0, &00, &AA, &00, &AA, &00, &A0, &00, &FF, &0F, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF
-Sprite1_26:   DEFB      &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &F0, &00, &AA, &00, &AA, &00, &A0, &00, &AA, &00, &AA, &00, &A0, &00, &FF, &0F, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF
-Sprite1_27:   DEFB      &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &F0, &00, &00, &00, &00, &00, &0F, &00, &00, &00, &00, &00, &00, &00, &FF, &0F, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF
-Sprite1_28:   DEFB      &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &F0, &FF, &00, &FF, &00, &FF, &0F, &FF, &00, &FF, &00, &FF, &00, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF
-Sprite1_29:   DEFB      &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF
-Sprite1_30:   DEFB      &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF
-Sprite1_31:   DEFB      &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF
-Sprite1_32:   DEFB      &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF, &FF
