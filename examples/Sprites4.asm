@@ -78,7 +78,7 @@ JREADKEY:       EQU     361             ; The Keyboard Read Routine...
 ;
 ; Print a Sprite
 ;
-print_sprite:	LD 		DE,Sprite1_1    ; Set pointer to start of our Sprite 
+print_sprite:	LD 		DE,Sprite1_1    ; Set the pointer to start of our Interleaved Sprite Data
                 LD      C,32            ; Setup Line counter, 32 lines per sprite to print
 ;
 ; This is the start of our Sprite Printing Loop
@@ -97,7 +97,7 @@ Print_Loop2:
 ;
 ;                CALL    Wait_For_Key    ;               
 ;
-                INC     DE              ; Move to next Sprite Byte
+                INC     DE              ; Move to next Byte of our interleaved Sprite Data
                 INC 	HL				; Move to the next Screen Position
 				
                 DJNZ 	Print_Loop1		; If we've not yet reach the last Sprite Byte, then loop                
@@ -147,10 +147,10 @@ Even_Line:      RES     7,L             ; Clear the top bit of the L Resister to
 ; Note: This isn't a subroutine as we want to jump back to the main code afterwards.
 ;
 Mask_Sprite:	LD 		A,(DE)			; Get the Mask Byte
-				AND 	(HL)			; AND with the Byte at the current Screen Location 
+				AND 	(HL)			; AND the Mask Byte with the Byte at the current Screen Location 
 				INC 	DE				; Point to the Sprite Byte
-				LD 		A,(DE)			; Get the Mask Byte
-				OR 		(HL)			; OR with the Byte at the current Screen Location
+				LD 		A,(DE)			; Get the Sprite Byte
+				OR 		(HL)			; OR the Sprite Byte with the Byte at the current Screen Location
 				LD 		(HL), A			; Write the result to the Screen
 ;
                 JP      Print_Loop2     ;
