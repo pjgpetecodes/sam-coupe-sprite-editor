@@ -1,26 +1,28 @@
-import {    createGrid, 
-            setAllCellsToDefaultColor, 
-            clearCellsToColour, 
-            hexToRgb, 
-            RgbToHex, 
-            setFillingMode,
-            setFillingTransparencyMode, 
-            moveGridLeft, 
-            moveGridRight, 
-            moveGridUp, 
-            moveGridDown, 
-            createEmptyGrids, 
-            nextGrid, 
-            previousGrid, 
-            generateSpriteData, 
-            generateMaskData,
-            generateData,
-            importSpriteData,
-            importSpriteMaskData,
-            importData,
-            setCutColumnMode,
-            setCutRowMode,
-            importPNG } from './grid.js';
+import {
+    createGrid,
+    setAllCellsToDefaultColor,
+    clearCellsToColour,
+    hexToRgb,
+    RgbToHex,
+    setFillingMode,
+    setFillingTransparencyMode,
+    moveGridLeft,
+    moveGridRight,
+    moveGridUp,
+    moveGridDown,
+    createEmptyGrids,
+    nextGrid,
+    previousGrid,
+    generateSpriteData,
+    generateMaskData,
+    generateData,
+    importSpriteData,
+    importSpriteMaskData,
+    importData,
+    setCutColumnMode,
+    setCutRowMode,
+    importPNG
+} from './grid.js';
 
 import { colors, createColorGrid, setSelectedColor } from './colors.js'
 import { bustCaches } from './bustCache.js'
@@ -28,12 +30,12 @@ import { bustCaches } from './bustCache.js'
 const spriteOutputTextBox = document.querySelector('#sprite-output');
 const maskOutputTextBox = document.querySelector('#mask-output');
 
-let useAmpersand = true; // set default value to true
-
+let useAmpersand = true;                    // Whether to use the Ampersand or 0xFF format
+let interleaveMaskFirst = true;             // Mask or Sprite Byte First for Interleave Format
 
 /**
  * Clear button click event
- */ 
+ */
 const clearButton = document.querySelector('#clear');
 clearButton.addEventListener('click', () => {
     setAllCellsToDefaultColor();
@@ -70,8 +72,8 @@ fillTransparencyButton.addEventListener('click', () => {
  * Generate Sprite Data Click Event
  */
 const generateSpriteDataButton = document.querySelector('#convert');
-generateSpriteDataButton.addEventListener('click', () => {    
-    generateData(useAmpersand);
+generateSpriteDataButton.addEventListener('click', () => {
+    generateData(useAmpersand, interleaveMaskFirst);
 });
 
 /**
@@ -88,7 +90,7 @@ importButton.addEventListener('click', () => {
 const nextButton = document.querySelector('#nextButton');
 nextButton.addEventListener('click', () => {
     nextGrid();
-    generateData(useAmpersand);
+    generateData(useAmpersand, interleaveMaskFirst);
 });
 
 /**
@@ -97,7 +99,7 @@ nextButton.addEventListener('click', () => {
 const prevButton = document.querySelector('#prevButton');
 prevButton.addEventListener('click', () => {
     previousGrid();
-    generateData(useAmpersand);
+    generateData(useAmpersand, interleaveMaskFirst);
 });
 
 /**
@@ -160,9 +162,15 @@ fileInput.addEventListener('change', (event) => {
 
 
 document.querySelectorAll('#hex-format input[type="radio"]').forEach((input) => {
-  input.addEventListener('change', () => {
-    useAmpersand = input.value === 'ampersand';
-  });
+    input.addEventListener('change', () => {
+        useAmpersand = input.value === 'ampersand';
+    });
+});
+
+document.querySelectorAll('#interleave-format input[type="radio"]').forEach((input) => {
+    input.addEventListener('change', () => {
+        interleaveMaskFirst = input.value === 'mask';
+    });
 });
 
 /**

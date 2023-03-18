@@ -52,14 +52,14 @@ JREADKEY:       EQU     361             ; The Keyboard Read Routine...
                                         ; ... The result will be stored in the A Register
                 OR      0b00100000      ; Set Bit 5 which, when loaded into the LMPR register...
                                         ; ... will Set the RAM in Page 0
-                LD		(Scr_Page+1),A  ; Overwrite the holding value for the Screen Page location...
+                LD	(Scr_Page+1),A  ; Overwrite the holding value for the Screen Page location...
                                         ; ... now that we know it
 ;                
                 CALL    Clear_Screen    ; Clear the Screen
 ;
-                LD		SP,0xC000       ; Set the Stack Pointer to a location of our choosing
+                LD	SP,0xC000       ; Set the Stack Pointer to a location of our choosing
 ;
-                LD		A,(Scr_Page+1)  ; Get the current Screen Location which we stored earlier
+                LD	A,(Scr_Page+1)  ; Get the current Screen Location which we stored earlier
                 OR      0b00100000      ; Set Bit 5 which, when loaded into the LMPR register...
                                         ; ... will Set the RAM in Page 0
                 OUT     (LMPR),A        ;
@@ -81,11 +81,11 @@ print_sprite:	LD 	HL,Sprite1_1    ; Set pointer to start of our Sprite
 ;
 ; This is the start of our Sprite Printing Loop
 ;
-Print_Loop:		LD 	B,16		; Set up loop counter, 16 bytes per line of a sprite to print
+Print_Loop:	LD 	B,16		; Set up loop counter, 16 bytes per line of a sprite to print
 ;
-Print_Loop1:	LD 		A,(HL)		; Get Sprite from pointer
+Print_Loop1:	LD 	A,(HL)		; Get Sprite from pointer
                 BIT     0,C             ; Check if this is an odd or even line...
-                JR 		NZ,Odd_Line	; ... If this is an odd line (Bit 0 is a 1), then print an odd line...
+                JR 	NZ,Odd_Line	; ... If this is an odd line (Bit 0 is a 1), then print an odd line...
                 JP      Even_Line       ; ... Otherwise, print an even line
 ;
 ; We've printed a pixel... Wait for a keypress then set for the next pixel in our Sprite...
@@ -103,7 +103,7 @@ Print_Loop2:
 ;
                 LD      E,0             ; Point to the Left of our screen
                 BIT     0,C             ; Check if this is an odd or even line...
-                JR 		Z,Print_Loop3   ; ... If this is an even line (Bit 0 is a 0), Dont' increment yet...
+                JR 	Z,Print_Loop3   ; ... If this is an even line (Bit 0 is a 0), Dont' increment yet...
                 INC     D               ; ... Otherwise, set for the next line
 ;
 ; Increment the Line Counter
@@ -112,7 +112,7 @@ Print_Loop3:    LD      A,C             ; Move C Register to A ready for Subtrac
                 LD      C,1             ; C= 1
                 SUB     C               ; Set for Next Sprite Line - Decrement C by 1 - Subtract C (1) from A 
                 LD      C,A             ; Move A Register back to C Register (Line Counter)
-                JR 		NZ,print_loop   ; Repeat if we're not on the last line
+                JR 	NZ,print_loop   ; Repeat if we're not on the last line
                 CALL    Wait_For_Key    ;               
 ;
 ; We must remember to switch BASIC back into Page 0
@@ -122,7 +122,7 @@ Print_Loop3:    LD      A,C             ; Move C Register to A ready for Subtrac
 ;
 ; Return the System Stack Pointer to it's original location in Bank B somewhere...
 ;
-System_SP:		LD      SP,0            ; Place holder for the System Stack Location...
+System_SP:	LD      SP,0            ; Place holder for the System Stack Location...
                                         ; This will be overwritten above once we know it's location
                 EI                      ; Enable Interupts
 ;
@@ -133,13 +133,13 @@ System_SP:		LD      SP,0            ; Place holder for the System Stack Location
 ;
 ;
 Odd_Line:       SET     7,E             ;
-                LD      (DE),A          ; Set the colour of pixels 0,2 and 0,3 to White
+                LD      (DE),A          ; Set the colour of pixels 0,0 and 0,1 to the Sprite Colour
                 JP      Print_Loop2     ;
 ;
 ;
 ;
 Even_Line:      RES     7,E             ;
-                LD      (DE),A          ; Set the colour of pixels 0,2 and 0,3 to White
+                LD      (DE),A          ; Set the colour of pixels 0,2 and 0,3 to the Sprite Colour
                 JP      Print_Loop2     ;
 ;
 ; ***********************************************************************************
@@ -163,20 +163,20 @@ Clear_Screen:   XOR     A               ; Clear the A register, so when passed i
 Wait_For_Key:   PUSH    BC              ; Save the BC Registers
                 PUSH    DE              ; Save the DE Registers
                 PUSH    HL              ; Save the HL Registers
-                LD		A,0x1F          ; Set for ROM in Page A
+                LD	A,0x1F          ; Set for ROM in Page A
                 OUT 	(LMPR),A        ; 
 ;
 Key_Loop:       CALL	JREADKEY	; Read the Keyboard (Zero if no key)
-       			JR 		Z,Key_Loop      ; If no key pressed, then loop
+       		JR 	Z,Key_Loop      ; If no key pressed, then loop
 ;
 No_Key_Loop:    CALL	JREADKEY	; Read the Keyboard (Zero if no key)
-       			JR 		NZ,No_Key_Loop  ; If key still pressed, then loop
+       		JR 	NZ,No_Key_Loop  ; If key still pressed, then loop
 ;
                 DI                      ; Disable Interuprts
 ;				
-Scr_Page:		LD      A,0          	; Place holder for the Screen Page...
+Scr_Page:	LD      A,0          	; Place holder for the Screen Page...
                                         ; ...The 0 will be overwritten above once we know where it is...
-                OUT		(LMPR),A        ; Page the Screen into the relevant Page 
+                OUT	(LMPR),A        ; Page the Screen into the relevant Page 
                 POP     HL              ; Retrieve the HL Registers
                 POP     DE              ; Retrieve the DE Registers
                 POP     BC              ; Retrieve the BC Registers
