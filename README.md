@@ -10,6 +10,26 @@ You can use this to generate sprites that work with my SAM Coupe Graphics in Ass
 
 https://www.petecodes.co.uk/graphics-in-assembler-for-the-sam-coupe/
 
+
+## Running Sam Coupe Locally
+
+If you try to run the Sam Coupe locally, you may see a CORS error. This is because the Sam Coupe emulator is hosted on a different domain. To get around this, you can run a local server. The simplest option is to use [http.server](https://docs.python.org/3/library/http.server.html) or the node [http.server](https://www.npmjs.com/package/http-server).
+
+You can run the Python server by running the following command in the root directory of the project:
+
+
+```bash
+python -m http.server 8000 
+```
+
+or the node server by running:
+
+```bash
+http-server -c-1 -p 8000
+```
+
+Once the server is running, you can access the emulator by launching the index.html file in your browser at http://localhost:8000.
+
 ## Export Format
 
 An example of the export format is;

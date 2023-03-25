@@ -1,5 +1,6 @@
 import { colors } from './colors.js';
 
+
 let savedGrids = [];
 
 const fillButton = document.querySelector('#fill');
@@ -363,6 +364,9 @@ function createGrid() {
                 cell.style.backgroundImage = '';
             }
 
+            // Without a link between the main and preview grid, we can only redraw the whole grid
+            drawPreview();
+
         });
 
         cell.addEventListener('mouseover', (event) => {
@@ -387,6 +391,10 @@ function createGrid() {
                     cell.style.backgroundImage = '';
                 }
             }
+
+            // Without a link between the main and preview grid, we can only redraw the whole grid
+            drawPreview();
+
         });
 
         cell.addEventListener('mouseup', () => {
@@ -522,6 +530,7 @@ function createEmptyGrid() {
  *  * Save the Current Grid to the savedGrids Array
  */
 function saveGrid() {
+
     const cells = document.querySelectorAll('.cell');
     const grid = [];
     for (let i = 0; i < cells.length; i++) {
@@ -536,6 +545,8 @@ function saveGrid() {
  * Load the Current Grid from the savedGrids Array
  */
 function loadGrid() {
+
+
     const grid = savedGrids[currentGridIndex];
     const cells = document.querySelectorAll('.cell');
     for (let i = 0; i < cells.length; i++) {
@@ -555,7 +566,25 @@ function loadGrid() {
     spriteOutputHeader.innerHTML = `Sprite ${currentGridIndex + 1} Data`;
     maskOutputHeader.innerHTML = `Mask ${currentGridIndex + 1} Data`;
     interleavedOutputHeader.innerHTML = `Interleave Data ${currentGridIndex + 1}`;
+
+    drawPreview();
 }
+
+
+
+/**
+ * Draw the preview grid form the contents of the main grid
+ */
+function drawPreview() {
+ 
+
+    let html = document.getElementById("grid").innerHTML; 
+    document.getElementById("preview-grid").innerHTML = html;
+
+    // NOTE: Do we want to change the classes of the preview grid here?
+
+}
+
 
 /**
  * Move to the Next Grid
