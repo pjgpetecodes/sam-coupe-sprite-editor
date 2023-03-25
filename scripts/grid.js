@@ -1,6 +1,5 @@
 import { colors } from './colors.js';
 
-console.log('Hello, Sam!')
 
 let savedGrids = [];
 
@@ -532,8 +531,6 @@ function createEmptyGrid() {
  */
 function saveGrid() {
 
-    console.log('saveGrid');
-
     const cells = document.querySelectorAll('.cell');
     const grid = [];
     for (let i = 0; i < cells.length; i++) {
@@ -549,7 +546,6 @@ function saveGrid() {
  */
 function loadGrid() {
 
-    console.log('loadGrid');
 
     const grid = savedGrids[currentGridIndex];
     const cells = document.querySelectorAll('.cell');
@@ -580,12 +576,12 @@ function loadGrid() {
  * Draw the preview grid form the contents of the main grid
  */
 function drawPreview() {
+ 
 
-    console.log('loadPreviewGrid'); 
-
-    let html = document.getElementById("grid").innerHTML;
-    console.log({'html': html});
+    let html = document.getElementById("grid").innerHTML; 
     document.getElementById("preview-grid").innerHTML = html;
+
+    // NOTE: Do we want to change the classes of the preview grid here?
 
 }
 
