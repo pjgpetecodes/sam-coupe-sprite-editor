@@ -54,6 +54,17 @@ h1 {
 	border: 2px solid black;
 }
 
+#preview-grid {
+	display: grid;
+	grid-template-columns: repeat(32, 6px);
+	grid-template-rows: repeat(32, 6px);
+	gap: 1px;
+	border: 1px solid black;
+	margin-bottom: 20px;
+	justify-self: center;
+}
+
+
 #grid {
 	display: grid;
 	grid-template-columns: repeat(32, 21px);
@@ -63,6 +74,7 @@ h1 {
 	margin-bottom: 20px;
 	justify-self: center;
 }
+
 
 #grid .cell {
 	background-color: white;

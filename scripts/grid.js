@@ -1,5 +1,7 @@
 import { colors } from './colors.js';
 
+console.log('Hello, Sam!')
+
 let savedGrids = [];
 
 const fillButton = document.querySelector('#fill');
@@ -536,6 +538,9 @@ function saveGrid() {
  * Load the Current Grid from the savedGrids Array
  */
 function loadGrid() {
+
+    console.log('loadGrid');
+
     const grid = savedGrids[currentGridIndex];
     const cells = document.querySelectorAll('.cell');
     for (let i = 0; i < cells.length; i++) {
@@ -555,7 +560,25 @@ function loadGrid() {
     spriteOutputHeader.innerHTML = `Sprite ${currentGridIndex + 1} Data`;
     maskOutputHeader.innerHTML = `Mask ${currentGridIndex + 1} Data`;
     interleavedOutputHeader.innerHTML = `Interleave Data ${currentGridIndex + 1}`;
+
+    loadPreviewGrid();
 }
+
+
+
+/**
+ * Load the Current Grid from the savedGrids Array
+ */
+function loadPreviewGrid() {
+
+    console.log('loadPreviewGrid'); 
+
+    let html = document.getElementById("grid").innerHTML;
+    console.log({'html': html});
+    document.getElementById("preview-grid").innerHTML = html;
+
+}
+
 
 /**
  * Move to the Next Grid
