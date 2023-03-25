@@ -56,12 +56,12 @@ h1 {
 
 #preview-grid {
 	display: grid;
-	grid-template-columns: repeat(32, 6px);
-	grid-template-rows: repeat(32, 6px);
+	grid-template-columns: repeat(32, 7px);
+	grid-template-rows: repeat(32, 7px);
 	gap: 1px;
-	border: 1px solid black;
 	margin-bottom: 20px;
 	justify-self: center;
+	margin: 10px;
 }
 
 

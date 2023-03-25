@@ -365,6 +365,9 @@ function createGrid() {
                 cell.style.backgroundImage = '';
             }
 
+            // Without a link between the main and preview grid, we can only redraw the whole grid
+            drawPreview();
+
         });
 
         cell.addEventListener('mouseover', (event) => {
@@ -389,6 +392,10 @@ function createGrid() {
                     cell.style.backgroundImage = '';
                 }
             }
+
+            // Without a link between the main and preview grid, we can only redraw the whole grid
+            drawPreview();
+
         });
 
         cell.addEventListener('mouseup', () => {
@@ -524,6 +531,9 @@ function createEmptyGrid() {
  *  * Save the Current Grid to the savedGrids Array
  */
 function saveGrid() {
+
+    console.log('saveGrid');
+
     const cells = document.querySelectorAll('.cell');
     const grid = [];
     for (let i = 0; i < cells.length; i++) {
@@ -561,15 +571,15 @@ function loadGrid() {
     maskOutputHeader.innerHTML = `Mask ${currentGridIndex + 1} Data`;
     interleavedOutputHeader.innerHTML = `Interleave Data ${currentGridIndex + 1}`;
 
-    loadPreviewGrid();
+    drawPreview();
 }
 
 
 
 /**
- * Load the Current Grid from the savedGrids Array
+ * Draw the preview grid form the contents of the main grid
  */
-function loadPreviewGrid() {
+function drawPreview() {
 
     console.log('loadPreviewGrid'); 
 
